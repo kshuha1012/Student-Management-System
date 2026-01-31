@@ -409,7 +409,7 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* ========== YANGI DAVOMAT TARIXI STILLARI ========== */
+/* ========== DAVOMAT TARIXI STILLARI ========== */
 
 /* Davomat kalendari */
 .attendance-calendar {
@@ -593,96 +593,486 @@
     font-size: 14px;
 }
 
-/* Oy statistika */
-.month-stats {
-    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 24px;
+/* IMTIHONLAR STILLARI */
+
+/* Imtihon kartalari */
+.exam-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    border-left: 4px solid #4f46e5;
 }
 
-.progress-bar {
-    height: 8px;
-    background: #e5e7eb;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-top: 8px;
+.exam-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-.progress-fill {
-    height: 100%;
-    border-radius: 4px;
+.exam-card.active {
+    border-left-color: #10b981;
 }
 
-.progress-fill.present { background: #10b981; }
-.progress-fill.absent { background: #ef4444; }
-.progress-fill.late { background: #f59e0b; }
+.exam-card.completed {
+    border-left-color: #3b82f6;
+}
 
-/* Filtrlar */
-.filter-group {
+.exam-card.draft {
+    border-left-color: #6b7280;
+}
+
+/* Savol stillari */
+.question-container {
     background: #f9fafb;
     border-radius: 12px;
-    padding: 16px;
+    padding: 20px;
     margin-bottom: 20px;
+    border: 1px solid #e5e7eb;
 }
 
-.date-range-picker {
+.question-container:hover {
+    background: #f3f4f6;
+}
+
+.question-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 16px;
+}
+
+.option-label {
     display: flex;
-    gap: 12px;
     align-items: center;
-}
-
-.date-input {
-    padding: 8px 12px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background: white;
     border: 1px solid #d1d5db;
     border-radius: 8px;
-    flex: 1;
-}
-
-/* Grafik */
-.chart-container {
-    height: 300px;
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 24px;
-}
-
-/* Export tugmalari */
-.export-buttons {
-    display: flex;
-    gap: 12px;
-    justify-content: flex-end;
-}
-
-.export-btn {
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.export-btn.pdf {
-    background: #ef4444;
-    color: white;
+.option-label:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
 }
 
-.export-btn.excel {
-    background: #10b981;
-    color: white;
+.option-label.selected {
+    background: #dbeafe;
+    border-color: #3b82f6;
+    color: #1e40af;
 }
 
-.export-btn.print {
+.option-label.correct {
+    background: #d1fae5;
+    border-color: #10b981;
+    color: #065f46;
+}
+
+.option-label.incorrect {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #991b1b;
+}
+
+/* Imtihon taymeri */
+.timer-container {
+    position: sticky;
+    top: 80px;
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 20;
+}
+
+.timer-warning {
+    color: #ef4444;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Natija kartalari */
+.result-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.result-grade {
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.result-grade.A { color: #10b981; }
+.result-grade.B { color: #3b82f6; }
+.result-grade.C { color: #f59e0b; }
+.result-grade.D { color: #f97316; }
+.result-grade.F { color: #ef4444; }
+
+/* Progress bar */
+.score-progress {
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.score-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #3b82f6);
+    border-radius: 5px;
+    transition: width 1s ease;
+}
+
+/* Imtihon filtrlari */
+.exam-filters {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 24px;
+}
+
+/* Google Forms import */
+.google-import-btn {
+    background: white;
+    border: 2px solid #4285f4;
+    color: #4285f4;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.google-import-btn:hover {
+    background: #4285f4;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ========== EMAIL STILLARI ========== */
+
+/* Email formasi */
+.email-editor {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.email-toolbar {
+    background: #f3f4f6;
+    padding: 10px 16px;
+    border-bottom: 1px solid #d1d5db;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.email-toolbar-left {
+    display: flex;
+    gap: 8px;
+}
+
+.email-toolbar-btn {
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.email-toolbar-btn:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.email-variable-btn {
+    background: #dbeafe;
+    border: 1px solid #3b82f6;
+    color: #1e40af;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.email-variable-btn:hover {
     background: #3b82f6;
     color: white;
 }
 
-.export-btn:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
+.email-content {
+    min-height: 200px;
+    padding: 16px;
+    outline: none;
+}
+
+/* Email preview */
+.email-preview {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.email-header {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+.email-recipient {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.email-subject {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.email-body {
+    line-height: 1.6;
+    color: #374151;
+}
+
+.email-body h1, .email-body h2, .email-body h3 {
+    color: #111827;
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
+
+.email-body p {
+    margin-bottom: 16px;
+}
+
+.email-body ul, .email-body ol {
+    margin-left: 20px;
+    margin-bottom: 16px;
+}
+
+.email-body li {
+    margin-bottom: 8px;
+}
+
+/* Recipient selection */
+.recipient-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.recipient-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.recipient-item:hover {
+    background: #f3f4f6;
+}
+
+.recipient-item.selected {
+    background: #dbeafe;
+    border-left: 3px solid #3b82f6;
+}
+
+.recipient-checkbox {
+    margin-right: 12px;
+}
+
+.recipient-info {
+    flex: 1;
+}
+
+.recipient-name {
+    font-weight: 500;
+    color: #111827;
+}
+
+.recipient-email {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Email logs */
+.email-log-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.email-log-row {
+    border-bottom: 1px solid #e5e7eb;
+    transition: background 0.3s ease;
+}
+
+.email-log-row:hover {
+    background: #f9fafb;
+}
+
+.email-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.email-status.sent {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.email-status.failed {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.email-status.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* Email statistics */
+.email-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.email-stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.email-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+}
+
+.email-stat-icon.sent {
+    background: #d1fae5;
+    color: #10b981;
+}
+
+.email-stat-icon.opened {
+    background: #dbeafe;
+    color: #3b82f6;
+}
+
+.email-stat-icon.clicked {
+    background: #f3e8ff;
+    color: #8b5cf6;
+}
+
+.email-stat-icon.failed {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.email-stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.email-stat-label {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* Email templates */
+.email-template-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.email-template-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border-color: #3b82f6;
+}
+
+.email-template-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-size: 24px;
+}
+
+.email-template-icon.attendance {
+    background: #dbeafe;
+    color: #3b82f6;
+}
+
+.email-template-icon.exam {
+    background: #d1fae5;
+    color: #10b981;
+}
+
+.email-template-icon.warning {
+    background: #fef3c7;
+    color: #f59e0b;
+}
+
+.email-template-icon.event {
+    background: #f3e8ff;
+    color: #8b5cf6;
+}
+
+.email-template-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.email-template-description {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 /* Mobil moslashuv */
@@ -706,6 +1096,47 @@
     }
     
     .attendance-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .email-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .email-toolbar {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    
+    .email-template-card {
+        padding: 16px;
+    }
+    
+    .exam-card {
+        padding: 16px;
+    }
+    
+    .question-container {
+        padding: 16px;
+    }
+    
+    .option-label {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+    
+    .result-card {
+        padding: 16px;
+    }
+    
+    .result-grade {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .email-stats {
         grid-template-columns: 1fr;
     }
 }

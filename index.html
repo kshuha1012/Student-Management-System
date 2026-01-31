@@ -139,6 +139,9 @@
                     <button class="menu-btn" data-tab="attendance">
                         <i class="fas fa-calendar-check"></i> Davomat
                     </button>
+                    <button class="menu-btn" data-tab="exams">
+                        <i class="fas fa-clipboard-check"></i> Imtihonlar
+                    </button>
                     <button class="menu-btn" data-tab="reports">
                         <i class="fas fa-chart-bar"></i> Hisobotlar
                     </button>
@@ -250,168 +253,245 @@
                 </div>
                 
                 <!-- Davomat tabi -->
-                <!-- Davomat tabi -->
-<div id="attendanceTab" class="tab-content">
-    <div class="flex justify-between items-center mb-6">
-        <div>
-            <h3 class="text-lg font-bold text-gray-800">Davomat Nazorati</h3>
-            <p class="text-gray-600" id="todayDate">Bugun: ...</p>
-        </div>
-        <div class="flex space-x-3">
-            <button onclick="showMonthlyStats()" 
-                    class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
-                <i class="fas fa-chart-bar mr-2"></i> Statistika
-            </button>
-            <button onclick="markAllPresent()" 
-                    class="px-4 py-2 bg-green-100 text-green-600 rounded-lg hover:bg-green-200">
-                <i class="fas fa-check-circle mr-2"></i> Hammasi Keldi
-            </button>
-            <button onclick="saveAttendance()" 
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                <i class="fas fa-save mr-2"></i> Davomatni Saqlash
-            </button>
-        </div>
-    </div>
-    
-    <!-- Guruh tanlash -->
-    <div class="mb-6 bg-white rounded-xl shadow-sm p-6">
-        <label class="block text-gray-700 mb-3">Guruhni tanlang:</label>
-        <div class="flex flex-wrap gap-3" id="groupButtons">
-            <!-- Guruh tugmalari bu yerga yuklanadi -->
-        </div>
-    </div>
-    
-    <!-- Davomat ro'yxati -->
-    <div id="attendanceContainer">
-        <!-- Guruh tanlanganda yuklanadi -->
-    </div>
-    
-    <!-- ==================== YANGI QISIM: DAVOMAT TARIXI ==================== -->
-    <!-- Davomat Tarixi -->
-    <div class="mt-8 bg-white rounded-xl shadow-sm p-6">
-        <h3 class="text-lg font-bold text-gray-800 mb-4">Davomat Tarixi</h3>
-        
-        <!-- Oylik ko'rinish -->
-        <div class="mb-6">
-            <div class="flex justify-between items-center mb-4">
-                <div>
-                    <label class="block text-gray-700 mb-2">Oyni tanlang:</label>
-                    <div class="flex items-center space-x-3">
-                        <button onclick="prevMonth()" class="p-2 text-gray-600 hover:text-blue-600">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <h4 id="currentMonth" class="text-lg font-bold">Yanvar 2024</h4>
-                        <button onclick="nextMonth()" class="p-2 text-gray-600 hover:text-blue-600">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
+                <div id="attendanceTab" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">Davomat Nazorati</h3>
+                            <p class="text-gray-600" id="todayDate">Bugun: ...</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button onclick="showMonthlyStats()" 
+                                    class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                                <i class="fas fa-chart-bar mr-2"></i> Statistika
+                            </button>
+                            <button onclick="markAllPresent()" 
+                                    class="px-4 py-2 bg-green-100 text-green-600 rounded-lg hover:bg-green-200">
+                                <i class="fas fa-check-circle mr-2"></i> Hammasi Keldi
+                            </button>
+                            <button onclick="saveAttendance()" 
+                                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                <i class="fas fa-save mr-2"></i> Davomatni Saqlash
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Guruh tanlash -->
+                    <div class="mb-6 bg-white rounded-xl shadow-sm p-6">
+                        <label class="block text-gray-700 mb-3">Guruhni tanlang:</label>
+                        <div class="flex flex-wrap gap-3" id="groupButtons">
+                            <!-- Guruh tugmalari bu yerga yuklanadi -->
+                        </div>
+                    </div>
+                    
+                    <!-- Davomat ro'yxati -->
+                    <div id="attendanceContainer">
+                        <!-- Guruh tanlanganda yuklanadi -->
+                    </div>
+                    
+                    <!-- Davomat Tarixi -->
+                    <div class="mt-8 bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Davomat Tarixi</h3>
+                        
+                        <!-- Oylik ko'rinish -->
+                        <div class="mb-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-2">Oyni tanlang:</label>
+                                    <div class="flex items-center space-x-3">
+                                        <button onclick="prevMonth()" class="p-2 text-gray-600 hover:text-blue-600">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </button>
+                                        <h4 id="currentMonth" class="text-lg font-bold">Yanvar 2024</h4>
+                                        <button onclick="nextMonth()" class="p-2 text-gray-600 hover:text-blue-600">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button onclick="exportAttendanceHistory()" 
+                                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                                    <i class="fas fa-download mr-2"></i> Excel ga yuklash
+                                </button>
+                            </div>
+                            
+                            <!-- Kalendar ko'rinishi -->
+                            <div id="attendanceCalendar" class="overflow-x-auto">
+                                <!-- Kalendar bu yerga yuklanadi -->
+                            </div>
+                        </div>
+                        
+                        <!-- Detalli davomat jadvali -->
+                        <div class="mt-8">
+                            <h4 class="font-bold text-gray-700 mb-4">Detalli Davomat Jadvali</h4>
+                            
+                            <!-- Filtrlar -->
+                            <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-gray-700 mb-2">Guruh</label>
+                                        <select id="historyGroup" class="form-control" onchange="loadAttendanceHistory()">
+                                            <option value="all">Barcha guruhlar</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-2">O'quvchi</label>
+                                        <select id="historyStudent" class="form-control" onchange="loadAttendanceHistory()">
+                                            <option value="all">Barcha o'quvchilar</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-2">Davomat holati</label>
+                                        <select id="historyStatus" class="form-control" onchange="loadAttendanceHistory()">
+                                            <option value="all">Barchasi</option>
+                                            <option value="present">Kelgan</option>
+                                            <option value="absent">Kelmaganga</option>
+                                            <option value="late">Kech qolgan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Davomat jadvali -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sana</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">O'quvchi</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Guruh</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Holat</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Izoh</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vaqt</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="attendanceHistoryTable">
+                                        <!-- Davomat tarixi bu yerga yuklanadi -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Pagination -->
+                            <div class="mt-6 flex justify-between items-center">
+                                <div class="text-sm text-gray-500" id="historyInfo">
+                                    0 ta yozuv ko'rsatilmoqda
+                                </div>
+                                <div class="flex space-x-2" id="pagination">
+                                    <!-- Pagination tugmalari -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <button onclick="exportAttendanceHistory()" 
-                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-                    <i class="fas fa-download mr-2"></i> Excel ga yuklash
-                </button>
-            </div>
-            
-            <!-- Kalendar ko'rinishi -->
-            <div id="attendanceCalendar" class="overflow-x-auto">
-                <!-- Kalendar bu yerga yuklanadi -->
-            </div>
-        </div>
-        
-        <!-- Detalli davomat jadvali -->
-        <div class="mt-8">
-            <h4 class="font-bold text-gray-700 mb-4">Detalli Davomat Jadvali</h4>
-            
-            <!-- Filtrlar -->
-            <div class="mb-6 bg-gray-50 p-4 rounded-lg">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-gray-700 mb-2">Guruh</label>
-                        <select id="historyGroup" class="form-control" onchange="loadAttendanceHistory()">
-                            <option value="all">Barcha guruhlar</option>
-                        </select>
+                
+                <!-- Imtihonlar tabi -->
+                <div id="examsTab" class="tab-content">
+                    <div class="mb-6 flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">Imtihonlar va Testlar</h3>
+                            <p class="text-gray-600">Test yaratish, tahrirlash va natijalarni ko'rish</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button onclick="createNewExam()" 
+                                    class="px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg">
+                                <i class="fas fa-plus mr-2"></i> Yangi Imtihon
+                            </button>
+                            <button onclick="importGoogleForm()" 
+                                    class="px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200">
+                                <i class="fab fa-google mr-2"></i> Google Forms dan Import
+                            </button>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-gray-700 mb-2">O'quvchi</label>
-                        <select id="historyStudent" class="form-control" onchange="loadAttendanceHistory()">
-                            <option value="all">Barcha o'quvchilar</option>
-                        </select>
+                    
+                    <!-- Filtrlar va qidiruv -->
+                    <div class="mb-6 bg-white rounded-xl shadow-sm p-4">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-gray-700 mb-2">Guruh</label>
+                                <select id="examGroupFilter" class="form-control" onchange="loadExams()">
+                                    <option value="all">Barcha guruhlar</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Imtihon turi</label>
+                                <select id="examTypeFilter" class="form-control" onchange="loadExams()">
+                                    <option value="all">Barcha turlar</option>
+                                    <option value="quiz">Viktorina</option>
+                                    <option value="midterm">Oraliq nazorat</option>
+                                    <option value="final">Yakuniy imtihon</option>
+                                    <option value="test">Test</option>
+                                    <option value="survey">So'rovnoma</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Holati</label>
+                                <select id="examStatusFilter" class="form-control" onchange="loadExams()">
+                                    <option value="all">Barchasi</option>
+                                    <option value="draft">Qoralama</option>
+                                    <option value="active">Faol</option>
+                                    <option value="completed">Yakunlangan</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Qidiruv</label>
+                                <div class="relative">
+                                    <input type="text" id="examSearch" placeholder="Test nomi..." 
+                                           class="form-control pl-10" oninput="loadExams()">
+                                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-gray-700 mb-2">Davomat holati</label>
-                        <select id="historyStatus" class="form-control" onchange="loadAttendanceHistory()">
-                            <option value="all">Barchasi</option>
-                            <option value="present">Kelgan</option>
-                            <option value="absent">Kelmaganga</option>
-                            <option value="late">Kech qolgan</option>
-                        </select>
+                    
+                    <!-- Imtihonlar kartalari -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="examsContainer">
+                        <!-- Imtihonlar bu yerga yuklanadi -->
+                    </div>
+                    
+                    <!-- Yakunlangan imtihonlar natijalari -->
+                    <div class="mt-8 bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">So'nggi Imtihon Natijalari</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left">O'quvchi</th>
+                                        <th class="px-6 py-3 text-left">Imtihon</th>
+                                        <th class="px-6 py-3 text-left">Guruh</th>
+                                        <th class="px-6 py-3 text-left">Baho</th>
+                                        <th class="px-6 py-3 text-left">O'rin</th>
+                                        <th class="px-6 py-3 text-left">Sana</th>
+                                        <th class="px-6 py-3 text-left">Amallar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="examResultsTable">
+                                    <!-- Imtihon natijalari bu yerga yuklanadi -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Davomat jadvali -->
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sana</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">O'quvchi</th>
-                            <th class="px6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Guruh</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Holat</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Izoh</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vaqt</th>
-                        </tr>
-                    </thead>
-                    <tbody id="attendanceHistoryTable">
-                        <!-- Davomat tarixi bu yerga yuklanadi -->
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Pagination -->
-            <div class="mt-6 flex justify-between items-center">
-                <div class="text-sm text-gray-500" id="historyInfo">
-                    0 ta yozuv ko'rsatilmoqda
-                </div>
-                <div class="flex space-x-2" id="pagination">
-                    <!-- Pagination tugmalari -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
                 
                 <!-- Hisobotlar tabi -->
                 <div id="reportsTab" class="tab-content">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <!-- Hisobot yaratish -->
-                        <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="bg-white rounded-xl shadow-sm p-6 lg:col-span-2">
                             <h3 class="text-lg font-bold text-gray-800 mb-4">Hisobot Yaratish</h3>
                             
                             <div class="space-y-4">
                                 <div>
                                     <label class="block text-gray-700 mb-2">Hisobot turi</label>
-                                    <select id="reportType" class="form-control">
+                                    <select id="reportType" class="form-control" onchange="toggleReportFields()">
                                         <option value="attendance">Davomat hisoboti</option>
                                         <option value="grades">Bahlar hisoboti</option>
                                         <option value="students">O'quvchilar ro'yxati</option>
                                         <option value="monthly">Oylik hisobot</option>
+                                        <option value="exam_results">Imtihon natijalari</option>
+                                        <option value="parent_notification">Ota-onalarga xabar</option>
                                     </select>
                                 </div>
                                 
-                                <div>
-                                    <label class="block text-gray-700 mb-2">Guruh</label>
-                                    <select id="reportGroup" class="form-control">
-                                        <option value="all">Barcha guruhlar</option>
-                                    </select>
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-gray-700 mb-2">Sana oralig'i</label>
-                                    <div class="grid grid-cols-2 gap-3">
-                                        <input type="date" id="reportStart" class="form-control">
-                                        <input type="date" id="reportEnd" class="form-control">
-                                    </div>
+                                <div id="reportFields" class="space-y-4">
+                                    <!-- Dinamik ravishda o'zgaradi -->
                                 </div>
                                 
                                 <div class="grid grid-cols-2 gap-3 pt-4">
@@ -432,22 +512,126 @@
                             <h3 class="text-lg font-bold text-gray-800 mb-4">Email Yuborish</h3>
                             
                             <div class="space-y-4">
+                                <!-- Email shablonlari -->
                                 <div>
-                                    <label class="block text-gray-700 mb-2">Ota-onalarga xabar</label>
-                                    <textarea id="emailMessage" rows="4" class="form-control" 
-                                              placeholder="Xabar matni..."></textarea>
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-gray-700 mb-2">Guruh</label>
-                                    <select id="emailGroup" class="form-control">
-                                        <option value="all">Barcha guruhlar</option>
+                                    <label class="block text-gray-700 mb-2">Shablon tanlang</label>
+                                    <select id="emailTemplate" class="form-control" onchange="loadEmailTemplate()">
+                                        <option value="custom">Maxsus xabar</option>
+                                        <option value="attendance_report">Davomat hisoboti</option>
+                                        <option value="exam_results">Imtihon natijalari</option>
+                                        <option value="low_attendance">Past davomat haqida ogohlantirish</option>
+                                        <option value="low_grades">Past baholar haqida ogohlantirish</option>
+                                        <option value="event_notification">Tadbirlar haqida xabar</option>
+                                        <option value="payment_reminder">To'lov eslatmasi</option>
                                     </select>
                                 </div>
                                 
-                                <button onclick="sendEmails()" 
-                                        class="w-full btn-primary">
-                                    <i class="fas fa-envelope mr-2"></i> Email Yuborish
+                                <div>
+                                    <label class="block text-gray-700 mb-2">Mavzu *</label>
+                                    <input type="text" id="emailSubject" class="form-control" 
+                                           placeholder="Xabar mavzusi...">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 mb-2">Xabar matni *</label>
+                                    <div class="border rounded-lg overflow-hidden mb-2">
+                                        <div class="bg-gray-50 px-4 py-2 border-b flex justify-between">
+                                            <div class="flex space-x-2">
+                                                <button onclick="formatText('bold')" class="p-1 hover:bg-gray-200 rounded">
+                                                    <i class="fas fa-bold"></i>
+                                                </button>
+                                                <button onclick="formatText('italic')" class="p-1 hover:bg-gray-200 rounded">
+                                                    <i class="fas fa-italic"></i>
+                                                </button>
+                                                <button onclick="formatText('underline')" class="p-1 hover:bg-gray-200 rounded">
+                                                    <i class="fas fa-underline"></i>
+                                                </button>
+                                            </div>
+                                            <div class="flex space-x-2">
+                                                <button onclick="insertVariable('student_name')" 
+                                                        class="text-sm px-2 py-1 bg-blue-100 text-blue-600 rounded">
+                                                    O'quvchi ismi
+                                                </button>
+                                                <button onclick="insertVariable('parent_name')" 
+                                                        class="text-sm px-2 py-1 bg-green-100 text-green-600 rounded">
+                                                    Ota-ona ismi
+                                                </button>
+                                                <button onclick="insertVariable('grade')" 
+                                                        class="text-sm px-2 py-1 bg-yellow-100 text-yellow-600 rounded">
+                                                    Baho
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <textarea id="emailMessage" rows="8" class="form-control border-0" 
+                                                  placeholder="Xabar matni..."></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 mb-2">Qabul qiluvchilar</label>
+                                    <select id="emailRecipients" class="form-control" multiple size="4">
+                                        <!-- O'quvchilar yoki guruhlar bu yerga yuklanadi -->
+                                    </select>
+                                    <div class="mt-2 flex justify-between">
+                                        <button onclick="selectAllRecipients()" class="text-sm text-blue-600">
+                                            Barchasini tanlash
+                                        </button>
+                                        <button onclick="clearRecipients()" class="text-sm text-red-600">
+                                            Tanlovni tozalash
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button onclick="previewEmail()" 
+                                            class="btn-secondary">
+                                        <i class="fas fa-eye mr-2"></i> Ko'rib chiqish
+                                    </button>
+                                    <button onclick="sendEmails()" 
+                                            class="btn-primary">
+                                        <i class="fas fa-paper-plane mr-2"></i> Email Yuborish
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Avtomatik xabarlar sozlamalari -->
+                    <div class="mt-6 bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Avtomatik Xabarlar Sozlamalari</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="autoAttendance" class="mr-3">
+                                    <label for="autoAttendance" class="text-gray-700">
+                                        Davomat 50% dan past bo'lganda ota-onalarga xabar yuborish
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="autoExamResults" class="mr-3" checked>
+                                    <label for="autoExamResults" class="text-gray-700">
+                                        Imtihon natijalari chiqqanda xabar yuborish
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="autoMonthlyReport" class="mr-3">
+                                    <label for="autoMonthlyReport" class="text-gray-700">
+                                        Har oy oylik hisobot yuborish
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="autoBirthday" class="mr-3">
+                                    <label for="autoBirthday" class="text-gray-700">
+                                        O'quvchi tug'ilgan kunida tabrik xabari yuborish
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-4 border-t">
+                                <button onclick="saveAutoEmailSettings()" 
+                                        class="btn-primary">
+                                    <i class="fas fa-save mr-2"></i> Sozlamalarni Saqlash
                                 </button>
                             </div>
                         </div>
@@ -620,6 +804,22 @@
                     </div>
                 </div>
                 
+                <!-- Ota-ona ma'lumotlari -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Ota-ona ismi</label>
+                        <input type="text" id="parentName" class="form-control">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Ota-ona emaili</label>
+                        <input type="email" id="parentEmail" class="form-control">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Ota-ona telefoni</label>
+                        <input type="tel" id="parentPhone" class="form-control">
+                    </div>
+                </div>
+                
                 <div>
                     <label class="block text-gray-700 mb-2">Qo'shimcha ma'lumot</label>
                     <textarea id="notes" rows="3" class="form-control"></textarea>
@@ -636,6 +836,274 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Yangi Imtihon Modal -->
+    <div id="examModal" class="modal-overlay hidden">
+        <div class="modal-content" style="max-width: 800px;">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6" id="examModalTitle">Yangi Imtihon</h2>
+            
+            <form id="examForm" class="space-y-6">
+                <input type="hidden" id="examId">
+                
+                <!-- Asosiy ma'lumotlar -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Imtihon Nomi *</label>
+                        <input type="text" id="examName" required class="form-control" placeholder="Masalan: Matematika 1-mavzu testi">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Imtihon Turi *</label>
+                        <select id="examType" required class="form-control">
+                            <option value="">Tanlang</option>
+                            <option value="quiz">Viktorina</option>
+                            <option value="midterm">Oraliq nazorat</option>
+                            <option value="final">Yakuniy imtihon</option>
+                            <option value="test">Test</option>
+                            <option value="survey">So'rovnoma</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Guruh *</label>
+                        <select id="examGroup" required class="form-control">
+                            <option value="">Tanlang</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Maksimal ball *</label>
+                        <input type="number" id="maxScore" required class="form-control" min="1" max="100" value="100">
+                    </div>
+                </div>
+                
+                <!-- Vaqt sozlamalari -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Boshlanish vaqti</label>
+                        <input type="datetime-local" id="startTime" class="form-control">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Tugash vaqti</label>
+                        <input type="datetime-local" id="endTime" class="form-control">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Davomiylik (daqiqa)</label>
+                        <input type="number" id="duration" class="form-control" min="1" placeholder="Cheklovsiz">
+                    </div>
+                </div>
+                
+                <!-- Imtihon tavsifi -->
+                <div>
+                    <label class="block text-gray-700 mb-2">Tavsif</label>
+                    <textarea id="examDescription" rows="3" class="form-control" 
+                              placeholder="Imtihon haqida qisqacha ma'lumot..."></textarea>
+                </div>
+                
+                <!-- Savollar qismi -->
+                <div class="border-t pt-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-gray-700">Savollar</h3>
+                        <button type="button" onclick="addQuestion()" 
+                                class="px-4 py-2 bg-blue-600 text-white rounded-lg">
+                            <i class="fas fa-plus mr-2"></i> Savol Qo'shish
+                        </button>
+                    </div>
+                    <div id="questionsContainer" class="space-y-4">
+                        <!-- Savollar bu yerga yuklanadi -->
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-6 border-t">
+                    <button type="button" onclick="closeExamModal()" 
+                            class="btn-secondary">
+                        Bekor qilish
+                    </button>
+                    <button type="button" onclick="saveExamAsDraft()" 
+                            class="btn-secondary">
+                        Qoralama sifatida saqlash
+                    </button>
+                    <button type="submit" 
+                            class="btn-primary">
+                        Imtihonni faollashtirish
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Savol Modal -->
+    <div id="questionModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6" id="questionModalTitle">Yangi Savol</h2>
+            
+            <form id="questionForm" class="space-y-4">
+                <input type="hidden" id="questionId">
+                
+                <div>
+                    <label class="block text-gray-700 mb-2">Savol matni *</label>
+                    <textarea id="questionText" rows="3" required class="form-control"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 mb-2">Savol turi *</label>
+                    <select id="questionType" required class="form-control" onchange="toggleAnswerOptions()">
+                        <option value="multiple_choice">Ko'p tanlovli</option>
+                        <option value="single_choice">Bitta tanlov</option>
+                        <option value="true_false">To'g'ri/Noto'g'ri</option>
+                        <option value="short_answer">Qisqa javob</option>
+                        <option value="essay">Insho (uzun javob)</option>
+                        <option value="matching">Moslashtirish</option>
+                    </select>
+                </div>
+                
+                <!-- Variantlar (faqat tanlovli savollar uchun) -->
+                <div id="optionsContainer" class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <label class="block text-gray-700">Variantlar</label>
+                        <button type="button" onclick="addOption()" class="text-sm text-blue-600">
+                            + Variant qo'shish
+                        </button>
+                    </div>
+                    <div id="optionsList" class="space-y-2">
+                        <!-- Variantlar bu yerga yuklanadi -->
+                    </div>
+                </div>
+                
+                <!-- To'g'ri javob -->
+                <div>
+                    <label class="block text-gray-700 mb-2">To'g'ri javob *</label>
+                    <div id="correctAnswerContainer">
+                        <input type="text" id="correctAnswer" required class="form-control">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 mb-2">Ball</label>
+                    <input type="number" id="questionScore" class="form-control" min="0" step="0.5" value="1">
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeQuestionModal()" 
+                            class="btn-secondary">
+                        Bekor qilish
+                    </button>
+                    <button type="submit" 
+                            class="btn-primary">
+                        Saqlash
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Imtihon Natijalari Modal -->
+    <div id="resultsModal" class="modal-overlay hidden">
+        <div class="modal-content" style="max-width: 900px;">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6" id="resultsModalTitle">Imtihon Natijalari</h2>
+            
+            <div class="mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <div class="text-2xl font-bold text-blue-600" id="totalParticipants">0</div>
+                        <div class="text-sm text-gray-600">Ishtirokchilar</div>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <div class="text-2xl font-bold text-green-600" id="averageScore">0</div>
+                        <div class="text-sm text-gray-600">O'rtacha ball</div>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <div class="text-2xl font-bold text-yellow-600" id="highestScore">0</div>
+                        <div class="text-sm text-gray-600">Eng yuqori ball</div>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <div class="text-2xl font-bold text-red-600" id="lowestScore">0</div>
+                        <div class="text-sm text-gray-600">Eng past ball</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left">O'rin</th>
+                            <th class="px-6 py-3 text-left">O'quvchi</th>
+                            <th class="px-6 py-3 text-left">Ball</th>
+                            <th class="px-6 py-3 text-left">Foiz</th>
+                            <th class="px-6 py-3 text-left">Vaqt</th>
+                            <th class="px-6 py-3 text-left">Holat</th>
+                            <th class="px-6 py-3 text-left">Amallar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsDetailsTable">
+                        <!-- Natijalar bu yerga yuklanadi -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-6 flex justify-end">
+                <button onclick="exportExamResults()" 
+                        class="px-4 py-2 bg-green-600 text-white rounded-lg">
+                    <i class="fas fa-download mr-2"></i> Excel ga yuklash
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Preview Modal -->
+    <div id="emailPreviewModal" class="modal-overlay hidden">
+        <div class="modal-content" style="max-width: 800px;">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Email Ko'rib Chiqish</h2>
+            
+            <div class="bg-white border rounded-lg p-6 mb-6">
+                <div class="border-b pb-4 mb-4">
+                    <div class="text-sm text-gray-500">Kimga:</div>
+                    <div id="previewRecipients" class="font-medium"></div>
+                </div>
+                
+                <div class="border-b pb-4 mb-4">
+                    <div class="text-sm text-gray-500">Mavzu:</div>
+                    <div id="previewSubject" class="font-medium text-lg"></div>
+                </div>
+                
+                <div>
+                    <div class="text-sm text-gray-500 mb-2">Xabar:</div>
+                    <div id="previewMessage" class="prose max-w-none"></div>
+                </div>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeEmailPreview()" 
+                        class="btn-secondary">
+                    Tahrirlash
+                </button>
+                <button onclick="confirmSendEmails()" 
+                        class="btn-primary">
+                    <i class="fas fa-paper-plane mr-2"></i> Yuborishni Tasdiqlash
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Muvaffaqiyatli Yuborildi Modal -->
+    <div id="emailSuccessModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="text-center p-8">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-check text-3xl text-green-600"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Xabarlar Muvaffaqiyatli Yuborildi!</h2>
+                <p class="text-gray-600 mb-6" id="emailSuccessMessage">
+                    Xabarlar yuborildi.
+                </p>
+                <button onclick="closeEmailSuccess()" 
+                        class="btn-primary px-8">
+                    OK
+                </button>
+            </div>
         </div>
     </div>
 
