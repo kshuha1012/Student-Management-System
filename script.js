@@ -1,13 +1,25 @@
+// ==================== FIREBASE KONFIGURATSIYASI ====================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getDatabase, ref, set, get, update, remove } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyB1sETrWBJvTIOlsIGhwtXyf6plD8TNRfs",
-    authDomain: "attendance-system-a1068.firebaseapp.com",
-    databaseURL: "https://attendance-system-a1068-default-rtdb.firebaseio.com",
-    projectId: "attendance-system-a1068",
-    storageBucket: "attendance-system-a1068.firebasestorage.app",
-    messagingSenderId: "499620745174",
-    appId: "1:499620745174:web:48c3224bac2f20e3c1e77"
+  apiKey: "AIzaSyByiZMtmQTseTWZ9bFiu0ee0WDUWIPsmdA",
+  authDomain: "student-management-syste-6fc68.firebaseapp.com",
+  projectId: "student-management-syste-6fc68",
+  storageBucket: "student-management-syste-6fc68.firebasestorage.app",
+  messagingSenderId: "685759189396",
+  appId: "1:685759189396:web:678fc74871a54d983aff81",
+  measurementId: "G-7B1FHR1NZT"
 };
 
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const auth = getAuth(app);
+
+console.log("✅ Firebase muvaffaqiyatli yuklandi!");
 // ==================== ASOSIY MA'LUMOTLAR ====================
 
 // Foydalanuvchilar (LocalStorage dan yoki default)
@@ -3461,4 +3473,31 @@ function saveProfile() {
 
 function changeProfilePhoto() {
     showNotification('Rasm yuklash funksiyasi keyingi versiyada!', 'info');
+}
+
+// ==================== GLOBAL FUNKSIYALAR ====================
+// Barcha funksiyalarni window obyektiga qo'shish
+window.showRegister = function() {
+    console.log("showRegister ishga tushdi");
+    document.getElementById('registerModal').classList.remove('hidden');
+}
+
+window.hideRegister = function() {
+    console.log("hideRegister ishga tushdi");
+    document.getElementById('registerModal').classList.add('hidden');
+}
+
+window.logout = function() {
+    console.log("logout ishga tushdi");
+    if (confirm('Tizimdan chiqishni tasdiqlaysizmi?')) {
+        currentUser = null;
+        localStorage.removeItem('currentUser');
+        document.getElementById('loginPage').classList.remove('hidden');
+        document.getElementById('dashboard').classList.add('hidden');
+        showNotification('Tizimdan chiqildi', 'info');
+    }
+}
+
+window.toggleSidebar = function() {
+    document.getElementById('sidebar').classList.toggle('active');
 }
