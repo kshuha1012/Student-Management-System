@@ -1,3 +1,14 @@
+// 🔴 MUHIM: O'ZINGIZNING FIREBASE MA'LUMOTLARINGIZNI YOZING!
+const firebaseConfig = {
+    apiKey: "AIzaSyBxxxxxxxxxxxxxxxxxxxxxx",  // API Key
+    authDomain: "talaba-menejeri.firebaseapp.com",
+    databaseURL: "https://talaba-menejeri-default-rtdb.firebaseio.com",
+    projectId: "talaba-menejeri",
+    storageBucket: "talaba-menejeri.appspot.com",
+    messagingSenderId: "123456789012",
+    appId: "1:123456789012:web:abc123def456"
+};
+
 // ==================== ASOSIY MA'LUMOTLAR ====================
 
 // Foydalanuvchilar (LocalStorage dan yoki default)
