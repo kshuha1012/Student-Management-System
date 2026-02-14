@@ -1,12 +1,11 @@
-// 🔴 MUHIM: O'ZINGIZNING FIREBASE MA'LUMOTLARINGIZNI YOZING!
 const firebaseConfig = {
-    apiKey: "AIzaSyBxxxxxxxxxxxxxxxxxxxxxx",  // API Key
-    authDomain: "talaba-menejeri.firebaseapp.com",
-    databaseURL: "https://talaba-menejeri-default-rtdb.firebaseio.com",
-    projectId: "talaba-menejeri",
-    storageBucket: "talaba-menejeri.appspot.com",
-    messagingSenderId: "123456789012",
-    appId: "1:123456789012:web:abc123def456"
+    apiKey: "AIzaSyB1sETrWBJvTIOlsIGhwtXyf6plD8TNRfs",
+    authDomain: "attendance-system-a1068.firebaseapp.com",
+    databaseURL: "https://attendance-system-a1068-default-rtdb.firebaseio.com",
+    projectId: "attendance-system-a1068",
+    storageBucket: "attendance-system-a1068.firebasestorage.app",
+    messagingSenderId: "499620745174",
+    appId: "1:499620745174:web:48c3224bac2f20e3c1e77"
 };
 
 // ==================== ASOSIY MA'LUMOTLAR ====================
@@ -67,7 +66,7 @@ const emailTemplates = {
                  Hurmat bilan,<br>
                  {school_name} Menejment`
     },
-    
+
     exam_results: {
         subject: "Hurmatli ota-ona, {student_name}ning imtihon natijalari",
         message: `Hurmatli {parent_name},<br><br>
@@ -81,7 +80,7 @@ const emailTemplates = {
                  Hurmat bilan,<br>
                  {school_name} Menejment`
     },
-    
+
     low_attendance: {
         subject: "Muhim: {student_name}ning davomat foizi past",
         message: `Hurmatli {parent_name},<br><br>
@@ -92,7 +91,7 @@ const emailTemplates = {
                  Hurmat bilan,<br>
                  {school_name} Menejment`
     },
-    
+
     low_grades: {
         subject: "{student_name}ning baholari haqida ogohlantirish",
         message: `Hurmatli {parent_name},<br><br>
@@ -104,7 +103,7 @@ const emailTemplates = {
                  Hurmat bilan,<br>
                  {school_name} Menejment`
     },
-    
+
     event_notification: {
         subject: "{school_name}dan yangi tadbir haqida xabar",
         message: `Hurmatli ota-onalar,<br><br>
@@ -117,7 +116,7 @@ const emailTemplates = {
                  Hurmat bilan,<br>
                  {school_name} Menejment`
     },
-    
+
     payment_reminder: {
         subject: "To'lov eslatmasi - {school_name}",
         message: `Hurmatli {parent_name},<br><br>
@@ -139,40 +138,40 @@ const recordsPerPage = 10;
 
 // ==================== SAHIFA YUKLANGANDA ====================
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Login formasi
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', handleLogin);
     }
-    
+
     // Ro'yxatdan o'tish formasi
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
         registerForm.addEventListener('submit', handleRegister);
     }
-    
+
     // Guruh formasi
     const groupForm = document.getElementById('groupForm');
     if (groupForm) {
         groupForm.addEventListener('submit', handleGroupForm);
     }
-    
+
     // O'quvchi formasi
     const studentForm = document.getElementById('studentForm');
     if (studentForm) {
         studentForm.addEventListener('submit', handleStudentForm);
     }
-    
+
     // Imtihon formasi
     const examForm = document.getElementById('examForm');
     if (examForm) {
-        examForm.addEventListener('submit', function(e) {
+        examForm.addEventListener('submit', function (e) {
             e.preventDefault();
             saveExam();
         });
     }
-    
+
     // Sahifa yuklanganda foydalanuvchini tekshirish
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
@@ -180,10 +179,10 @@ document.addEventListener('DOMContentLoaded', function() {
         showDashboard();
         initDashboard();
     }
-    
+
     // Event listenerlarni sozlash
     setupEventListeners();
-    
+
     // Sahifa yuklanganda hisobot maydonlarini yuklash
     setTimeout(() => {
         if (document.getElementById('reportType')) {
@@ -196,13 +195,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function handleLogin(e) {
     e.preventDefault();
-    
+
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    
+
     // Foydalanuvchini tekshirish
     const user = users.find(u => u.username === username && u.password === password);
-    
+
     if (user) {
         currentUser = user;
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -216,30 +215,30 @@ function handleLogin(e) {
 
 function handleRegister(e) {
     e.preventDefault();
-    
+
     const name = document.getElementById('regName').value;
     const lastName = document.getElementById('regLastName').value;
     const username = document.getElementById('regUsername').value;
     const email = document.getElementById('regEmail').value;
     const password = document.getElementById('regPassword').value;
     const confirmPassword = document.getElementById('regConfirmPassword').value;
-    
+
     // Validatsiya
     if (password !== confirmPassword) {
         showNotification('Parollar mos kelmadi!', 'error');
         return;
     }
-    
+
     if (users.some(u => u.username === username)) {
         showNotification('Bu foydalanuvchi nomi band!', 'error');
         return;
     }
-    
+
     if (users.some(u => u.email === email)) {
         showNotification('Bu email band!', 'error');
         return;
     }
-    
+
     // Yangi foydalanuvchi
     const newUser = {
         id: Date.now(),
@@ -251,13 +250,13 @@ function handleRegister(e) {
         role: 'teacher',
         createdAt: new Date().toISOString()
     };
-    
+
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
-    
+
     showNotification('Ro\'yxatdan muvaffaqiyatli o\'tdingiz!', 'success');
     hideRegister();
-    
+
     // Automatik login
     document.getElementById('username').value = username;
     document.getElementById('password').value = password;
@@ -308,7 +307,7 @@ function initDashboard() {
 
 function updateUserInfo() {
     if (!currentUser) return;
-    
+
     const initial = currentUser.name.charAt(0);
     document.getElementById('userInitial').textContent = initial;
     document.getElementById('userName').textContent = currentUser.name;
@@ -322,24 +321,24 @@ function updateUserInfo() {
 function setupTabs() {
     const menuButtons = document.querySelectorAll('.menu-btn');
     menuButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             // Barcha tugmalardan aktiv classni olib tashlash
             menuButtons.forEach(btn => btn.classList.remove('active'));
             // Barcha tablarni yashirish
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
-            
+
             // Tanlangan tugmani aktiv qilish
             this.classList.add('active');
-            
+
             // Tanlangan tabni ko'rsatish
             const tabName = this.getAttribute('data-tab');
             document.getElementById(tabName + 'Tab').classList.add('active');
-            
+
             // Sahifa sarlavhasini yangilash
             updatePageTitle(tabName);
-            
+
             // Agar sidebar kichik ekranda ochiq bo'lsa, yopish
             if (window.innerWidth < 1024) {
                 document.getElementById('sidebar').classList.remove('active');
@@ -357,7 +356,7 @@ function updatePageTitle(tabName) {
         'reports': 'Hisobotlar',
         'settings': 'Sozlamalar'
     };
-    
+
     const descriptions = {
         'groups': 'Guruhlarni boshqarish',
         'students': 'O\'quvchilar ro\'yxati',
@@ -366,7 +365,7 @@ function updatePageTitle(tabName) {
         'reports': 'Hisobotlar yaratish',
         'settings': 'Foydalanuvchi sozlamalari'
     };
-    
+
     document.getElementById('pageTitle').textContent = titles[tabName] || 'Dashboard';
     document.getElementById('pageDescription').textContent = descriptions[tabName] || '';
 }
@@ -376,9 +375,9 @@ function updatePageTitle(tabName) {
 function loadGroups() {
     const container = document.getElementById('groupsContainer');
     if (!container) return;
-    
+
     container.innerHTML = '';
-    
+
     if (groups.length === 0) {
         container.innerHTML = `
             <div class="col-span-full text-center py-12">
@@ -395,15 +394,15 @@ function loadGroups() {
         `;
         return;
     }
-    
+
     groups.forEach(group => {
         const groupStudents = students.filter(s => s.groupId === group.id);
         const presentCount = groupStudents.filter(s => s.attendance === 'present').length;
-        const attendanceRate = groupStudents.length > 0 ? 
+        const attendanceRate = groupStudents.length > 0 ?
             Math.round((presentCount / groupStudents.length) * 100) : 0;
-        const avgGrade = groupStudents.length > 0 ? 
+        const avgGrade = groupStudents.length > 0 ?
             (groupStudents.reduce((sum, s) => sum + (s.grade || 0), 0) / groupStudents.length).toFixed(1) : '0.0';
-        
+
         const groupCard = document.createElement('div');
         groupCard.className = 'group-card';
         groupCard.innerHTML = `
@@ -449,7 +448,7 @@ function loadGroups() {
                 </div>
             </div>
         `;
-        
+
         container.appendChild(groupCard);
     });
 }
@@ -458,7 +457,7 @@ function openGroupModal(group = null) {
     const modal = document.getElementById('groupModal');
     const title = document.getElementById('groupModalTitle');
     const form = document.getElementById('groupForm');
-    
+
     if (group) {
         title.textContent = 'Guruhni Tahrirlash';
         document.getElementById('groupId').value = group.id;
@@ -471,7 +470,7 @@ function openGroupModal(group = null) {
         form.reset();
         document.getElementById('groupId').value = '';
     }
-    
+
     modal.classList.remove('hidden');
 }
 
@@ -482,7 +481,7 @@ function closeGroupModal() {
 
 function handleGroupForm(e) {
     e.preventDefault();
-    
+
     const groupId = document.getElementById('groupId').value;
     const group = {
         id: groupId || Date.now(),
@@ -493,7 +492,7 @@ function handleGroupForm(e) {
         createdAt: groupId ? groups.find(g => g.id == groupId).createdAt : new Date().toISOString().split('T')[0],
         students: groupId ? groups.find(g => g.id == groupId).students : []
     };
-    
+
     if (groupId) {
         // Yangilash
         const index = groups.findIndex(g => g.id == groupId);
@@ -504,7 +503,7 @@ function handleGroupForm(e) {
         groups.push(group);
         showNotification('Yangi guruh yaratildi!', 'success');
     }
-    
+
     saveToLocalStorage();
     loadGroups();
     updateStatistics();
@@ -522,7 +521,7 @@ function deleteGroup(id) {
         students = students.filter(s => s.groupId !== id);
         // Guruhni o'chirish
         groups = groups.filter(g => g.id !== id);
-        
+
         saveToLocalStorage();
         loadGroups();
         loadStudents();
@@ -534,7 +533,7 @@ function deleteGroup(id) {
 function viewGroup(id) {
     const group = groups.find(g => g.id === id);
     const groupStudents = students.filter(s => s.groupId === id);
-    
+
     let modalContent = `
         <div class="modal-content">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">${group.name}</h2>
@@ -554,7 +553,7 @@ function viewGroup(id) {
             <div class="space-y-3 mb-6">
                 <h3 class="font-bold text-gray-700">Guruh O'quvchilari</h3>
     `;
-    
+
     if (groupStudents.length === 0) {
         modalContent += `
             <div class="text-center py-8">
@@ -587,7 +586,7 @@ function viewGroup(id) {
             `;
         });
     }
-    
+
     modalContent += `
             </div>
             
@@ -603,7 +602,7 @@ function viewGroup(id) {
             </div>
         </div>
     `;
-    
+
     showModal(modalContent);
 }
 
@@ -617,9 +616,9 @@ function openStudentModalForGroup(groupId) {
 function loadStudents() {
     const table = document.getElementById('studentsTable');
     if (!table) return;
-    
+
     table.innerHTML = '';
-    
+
     if (students.length === 0) {
         table.innerHTML = `
             <tr>
@@ -632,15 +631,15 @@ function loadStudents() {
         document.getElementById('studentsCount').textContent = '0 ta o\'quvchi';
         return;
     }
-    
+
     students.forEach(student => {
         const group = groups.find(g => g.id === student.groupId);
         const groupName = group ? group.name : 'Guruhsiz';
-        const statusText = student.attendance === 'present' ? 'Kelgan' : 
-                          student.attendance === 'absent' ? 'Kelmaganga' : 'Kech qolgan';
-        const statusClass = student.attendance === 'present' ? 'bg-green-100 text-green-800' : 
-                           student.attendance === 'absent' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800';
-        
+        const statusText = student.attendance === 'present' ? 'Kelgan' :
+            student.attendance === 'absent' ? 'Kelmaganga' : 'Kech qolgan';
+        const statusClass = student.attendance === 'present' ? 'bg-green-100 text-green-800' :
+            student.attendance === 'absent' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800';
+
         const row = document.createElement('tr');
         row.className = 'student-row';
         row.innerHTML = `
@@ -684,10 +683,10 @@ function loadStudents() {
                 </div>
             </td>
         `;
-        
+
         table.appendChild(row);
     });
-    
+
     document.getElementById('studentsCount').textContent = `${students.length} ta o'quvchi`;
 }
 
@@ -696,11 +695,11 @@ function openStudentModal(student = null, groupId = null) {
     const title = document.getElementById('studentModalTitle');
     const form = document.getElementById('studentForm');
     const groupSelect = document.getElementById('studentGroup');
-    
+
     // Guruhlarni to'ldirish
-    groupSelect.innerHTML = '<option value="">Tanlang</option>' + 
+    groupSelect.innerHTML = '<option value="">Tanlang</option>' +
         groups.map(g => `<option value="${g.id}">${g.name} (Kurs ${g.course})</option>`).join('');
-    
+
     if (student) {
         title.textContent = 'O\'quvchini Tahrirlash';
         document.getElementById('studentId').value = student.id;
@@ -722,7 +721,7 @@ function openStudentModal(student = null, groupId = null) {
             document.getElementById('studentGroup').value = groupId;
         }
     }
-    
+
     modal.classList.remove('hidden');
 }
 
@@ -733,7 +732,7 @@ function closeStudentModal() {
 
 function handleStudentForm(e) {
     e.preventDefault();
-    
+
     const studentId = document.getElementById('studentId').value;
     const student = {
         id: studentId || Date.now(),
@@ -751,7 +750,7 @@ function handleStudentForm(e) {
         photo: null,
         email: ''
     };
-    
+
     if (studentId) {
         // Yangilash
         const index = students.findIndex(s => s.id == studentId);
@@ -759,7 +758,7 @@ function handleStudentForm(e) {
         student.attendance = oldStudent.attendance;
         student.photo = oldStudent.photo;
         student.email = oldStudent.email;
-        
+
         students[index] = student;
         showNotification('O\'quvchi yangilandi!', 'success');
     } else {
@@ -767,7 +766,7 @@ function handleStudentForm(e) {
         students.push(student);
         showNotification("Yangi o'quvchi qo\'shildi!", 'success');
     }
-    
+
     saveToLocalStorage();
     loadStudents();
     updateStatistics();
@@ -801,14 +800,14 @@ function updateTodayDate() {
 function loadGroupButtons() {
     const container = document.getElementById('groupButtons');
     if (!container) return;
-    
+
     container.innerHTML = '';
-    
+
     if (groups.length === 0) {
         container.innerHTML = '<p class="text-gray-500">Hali guruhlar yo\'q</p>';
         return;
     }
-    
+
     groups.forEach(group => {
         const button = document.createElement('button');
         button.className = 'px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition duration-300';
@@ -821,11 +820,11 @@ function loadGroupButtons() {
 function loadGroupAttendance(groupId) {
     const group = groups.find(g => g.id === groupId);
     if (!group) return;
-    
+
     const groupStudents = students.filter(s => s.groupId === groupId);
     const today = new Date().toISOString().split('T')[0];
     const todayAttendance = attendance[today] || {};
-    
+
     let content = `
         <div class="bg-white rounded-xl shadow-sm p-6">
             <div class="flex justify-between items-center mb-6">
@@ -844,7 +843,7 @@ function loadGroupAttendance(groupId) {
             
             <div class="space-y-3">
     `;
-    
+
     if (groupStudents.length === 0) {
         content += `
             <div class="text-center py-8">
@@ -854,7 +853,7 @@ function loadGroupAttendance(groupId) {
     } else {
         groupStudents.forEach(student => {
             const studentAttendance = todayAttendance[student.id] || { status: 'present', note: '' };
-            
+
             content += `
                 <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div class="flex items-center">
@@ -893,12 +892,12 @@ function loadGroupAttendance(groupId) {
             `;
         });
     }
-    
+
     content += `
             </div>
         </div>
     `;
-    
+
     document.getElementById('attendanceContainer').innerHTML = content;
 }
 
@@ -907,13 +906,13 @@ function setAttendance(studentId, status) {
     if (!attendance[today]) {
         attendance[today] = {};
     }
-    
+
     if (!attendance[today][studentId]) {
         attendance[today][studentId] = { status: status, note: '' };
     } else {
         attendance[today][studentId].status = status;
     }
-    
+
     // UI ni yangilash
     const studentElement = document.querySelector(`[onclick="setAttendance(${studentId}, 'present')"]`).parentElement.parentElement;
     const buttons = studentElement.querySelectorAll('.attendance-btn');
@@ -924,11 +923,11 @@ function setAttendance(studentId, status) {
 function markAllPresent(groupId) {
     const groupStudents = students.filter(s => s.groupId === groupId);
     const today = new Date().toISOString().split('T')[0];
-    
+
     if (!attendance[today]) {
         attendance[today] = {};
     }
-    
+
     groupStudents.forEach(student => {
         if (!attendance[today][student.id]) {
             attendance[today][student.id] = { status: 'present', note: '' };
@@ -936,7 +935,7 @@ function markAllPresent(groupId) {
             attendance[today][student.id].status = 'present';
         }
     });
-    
+
     // UI ni yangilash
     document.querySelectorAll('.attendance-btn.present').forEach(btn => {
         btn.classList.add('active');
@@ -944,14 +943,14 @@ function markAllPresent(groupId) {
             otherBtn.classList.remove('active');
         });
     });
-    
+
     showNotification('Barchasi "kelgan" deb belgilandi!', 'success');
 }
 
 function saveGroupAttendance(groupId) {
     const today = new Date().toISOString().split('T')[0];
     const groupStudents = students.filter(s => s.groupId === groupId);
-    
+
     // Izohlarni yig'ish
     groupStudents.forEach(student => {
         const noteInput = document.getElementById(`note-${student.id}`);
@@ -959,7 +958,7 @@ function saveGroupAttendance(groupId) {
             attendance[today][student.id].note = noteInput.value;
         }
     });
-    
+
     // O'quvchilarning attendance maydonini yangilash
     groupStudents.forEach(student => {
         if (attendance[today] && attendance[today][student.id]) {
@@ -969,7 +968,7 @@ function saveGroupAttendance(groupId) {
             }
         }
     });
-    
+
     saveToLocalStorage();
     showNotification('Davomat saqlandi!', 'success');
 }
@@ -989,11 +988,11 @@ function initAttendanceHistory() {
 
 function updateAttendanceHistory() {
     const today = new Date().toISOString().split('T')[0];
-    
+
     if (!attendanceHistory[today]) {
         attendanceHistory[today] = {};
     }
-    
+
     students.forEach(student => {
         if (!attendanceHistory[today][student.id]) {
             attendanceHistory[today][student.id] = {
@@ -1003,27 +1002,27 @@ function updateAttendanceHistory() {
             };
         }
     });
-    
+
     localStorage.setItem('attendanceHistory', JSON.stringify(attendanceHistory));
 }
 
 function loadAttendanceCalendar() {
     const calendarContainer = document.getElementById('attendanceCalendar');
     if (!calendarContainer) return;
-    
+
     const monthNames = [
         'Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun',
         'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'
     ];
-    
-    document.getElementById('currentMonth').textContent = 
+
+    document.getElementById('currentMonth').textContent =
         `${monthNames[currentMonth]} ${currentYear}`;
-    
+
     const firstDay = new Date(currentYear, currentMonth, 1);
     const lastDay = new Date(currentYear, currentMonth + 1, 0);
     const daysInMonth = lastDay.getDate();
     const startDay = firstDay.getDay();
-    
+
     let calendarHTML = `
         <div class="attendance-calendar">
             <div class="calendar-header">Ya</div>
@@ -1034,37 +1033,37 @@ function loadAttendanceCalendar() {
             <div class="calendar-header">Ju</div>
             <div class="calendar-header">Sh</div>
     `;
-    
+
     for (let i = 0; i < startDay; i++) {
         calendarHTML += `<div class="calendar-day empty"></div>`;
     }
-    
+
     const today = new Date();
     const isToday = (day) => {
-        return day === today.getDate() && 
-               currentMonth === today.getMonth() && 
-               currentYear === today.getFullYear();
+        return day === today.getDate() &&
+            currentMonth === today.getMonth() &&
+            currentYear === today.getFullYear();
     };
-    
+
     for (let day = 1; day <= daysInMonth; day++) {
         const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const dayAttendance = attendanceHistory[dateStr] || {};
-        
+
         const attendanceCounts = {
             present: 0,
             absent: 0,
             late: 0
         };
-        
+
         Object.values(dayAttendance).forEach(record => {
             if (record.status === 'present') attendanceCounts.present++;
             else if (record.status === 'absent') attendanceCounts.absent++;
             else if (record.status === 'late') attendanceCounts.late++;
         });
-        
+
         const total = Object.keys(dayAttendance).length;
         const presentPercent = total > 0 ? Math.round((attendanceCounts.present / total) * 100) : 0;
-        
+
         calendarHTML += `
             <div class="calendar-day ${isToday(day) ? 'today' : ''}" onclick="showDayAttendance('${dateStr}')">
                 <div class="calendar-date">${day}</div>
@@ -1096,7 +1095,7 @@ function loadAttendanceCalendar() {
             </div>
         `;
     }
-    
+
     calendarHTML += `</div>`;
     calendarContainer.innerHTML = calendarHTML;
 }
@@ -1126,7 +1125,7 @@ function showDayAttendance(dateStr) {
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     const formattedDate = date.toLocaleDateString('uz-UZ', options);
     const dayAttendance = attendanceHistory[dateStr] || {};
-    
+
     let modalContent = `
         <div class="modal-content">
             <h2 class="text-xl font-bold text-gray-800 mb-6">${formattedDate}</h2>
@@ -1154,7 +1153,7 @@ function showDayAttendance(dateStr) {
             
             <div class="space-y-3">
     `;
-    
+
     if (Object.keys(dayAttendance).length === 0) {
         modalContent += `
             <div class="text-center py-8">
@@ -1166,14 +1165,14 @@ function showDayAttendance(dateStr) {
         Object.keys(dayAttendance).forEach(studentId => {
             const student = students.find(s => s.id == studentId);
             if (!student) return;
-            
+
             const record = dayAttendance[studentId];
             const group = groups.find(g => g.id === student.groupId);
-            const statusClass = record.status === 'present' ? 'present' : 
-                               record.status === 'absent' ? 'absent' : 'late';
-            const statusText = record.status === 'present' ? 'Kelgan' : 
-                              record.status === 'absent' ? 'Kelmaganga' : 'Kech qolgan';
-            
+            const statusClass = record.status === 'present' ? 'present' :
+                record.status === 'absent' ? 'absent' : 'late';
+            const statusText = record.status === 'present' ? 'Kelgan' :
+                record.status === 'absent' ? 'Kelmaganga' : 'Kech qolgan';
+
             modalContent += `
                 <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div class="flex items-center">
@@ -1193,7 +1192,7 @@ function showDayAttendance(dateStr) {
             `;
         });
     }
-    
+
     modalContent += `
             </div>
             
@@ -1205,29 +1204,29 @@ function showDayAttendance(dateStr) {
             </div>
         </div>
     `;
-    
+
     showModal(modalContent);
 }
 
 function editDayAttendance(dateStr) {
     closeModal();
-    
+
     const date = new Date(dateStr);
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     const formattedDate = date.toLocaleDateString('uz-UZ', options);
     const dayAttendance = attendanceHistory[dateStr] || {};
-    
+
     let modalContent = `
         <div class="modal-content">
             <h2 class="text-xl font-bold text-gray-800 mb-6">Davomatni Tahrirlash - ${formattedDate}</h2>
             
             <div class="space-y-3 mb-6">
     `;
-    
+
     students.forEach(student => {
         const group = groups.find(g => g.id === student.groupId);
         const record = dayAttendance[student.id] || { status: 'present', note: '', time: '09:00' };
-        
+
         modalContent += `
             <div class="p-3 border rounded-lg">
                 <div class="flex justify-between items-center mb-3">
@@ -1274,7 +1273,7 @@ function editDayAttendance(dateStr) {
             </div>
         `;
     });
-    
+
     modalContent += `
             </div>
             
@@ -1290,7 +1289,7 @@ function editDayAttendance(dateStr) {
             </div>
         </div>
     `;
-    
+
     showModal(modalContent);
 }
 
@@ -1298,19 +1297,19 @@ function saveDayAttendance(dateStr) {
     if (!attendanceHistory[dateStr]) {
         attendanceHistory[dateStr] = {};
     }
-    
+
     document.querySelectorAll('.attendance-select').forEach(select => {
         const studentId = select.getAttribute('data-student');
         const status = select.value;
         const time = document.querySelector(`.time-input[data-student="${studentId}"]`).value;
         const note = document.querySelector(`.note-input[data-student="${studentId}"]`).value;
-        
+
         attendanceHistory[dateStr][studentId] = {
             status: status,
             time: time,
             note: note
         };
-        
+
         const today = new Date().toISOString().split('T')[0];
         if (dateStr === today) {
             const studentIndex = students.findIndex(s => s.id == studentId);
@@ -1319,10 +1318,10 @@ function saveDayAttendance(dateStr) {
             }
         }
     });
-    
+
     localStorage.setItem('attendanceHistory', JSON.stringify(attendanceHistory));
     saveToLocalStorage();
-    
+
     closeModal();
     loadAttendanceCalendar();
     loadAttendanceHistory();
@@ -1333,26 +1332,26 @@ function loadAttendanceHistory() {
     const table = document.getElementById('attendanceHistoryTable');
     const info = document.getElementById('historyInfo');
     const pagination = document.getElementById('pagination');
-    
+
     if (!table) return;
-    
+
     const selectedGroup = document.getElementById('historyGroup').value;
     const selectedStudent = document.getElementById('historyStudent').value;
     const selectedStatus = document.getElementById('historyStatus').value;
-    
+
     let allRecords = [];
-    
+
     Object.keys(attendanceHistory).forEach(dateStr => {
         Object.keys(attendanceHistory[dateStr]).forEach(studentId => {
             const record = attendanceHistory[dateStr][studentId];
             const student = students.find(s => s.id == studentId);
             const group = student ? groups.find(g => g.id === student.groupId) : null;
-            
+
             if (selectedGroup !== 'all' && group && group.id != selectedGroup) return;
             if (selectedStudent !== 'all' && student && student.id != selectedStudent) return;
             if (selectedStatus !== 'all' && record.status !== selectedStatus) return;
             if (!student) return;
-            
+
             allRecords.push({
                 date: dateStr,
                 student: student,
@@ -1361,17 +1360,17 @@ function loadAttendanceHistory() {
             });
         });
     });
-    
+
     allRecords.sort((a, b) => new Date(b.date) - new Date(a.date));
-    
+
     const totalRecords = allRecords.length;
     const totalPages = Math.ceil(totalRecords / recordsPerPage);
     const startIndex = (currentPage - 1) * recordsPerPage;
     const endIndex = startIndex + recordsPerPage;
     const pageRecords = allRecords.slice(startIndex, endIndex);
-    
+
     table.innerHTML = '';
-    
+
     if (pageRecords.length === 0) {
         table.innerHTML = `
             <tr>
@@ -1384,18 +1383,18 @@ function loadAttendanceHistory() {
     } else {
         pageRecords.forEach((item, index) => {
             const date = new Date(item.date);
-            const formattedDate = date.toLocaleDateString('uz-UZ', { 
-                weekday: 'short', 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric' 
+            const formattedDate = date.toLocaleDateString('uz-UZ', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
             });
-            
-            const statusClass = item.record.status === 'present' ? 'present' : 
-                               item.record.status === 'absent' ? 'absent' : 'late';
-            const statusText = item.record.status === 'present' ? 'Kelgan' : 
-                              item.record.status === 'absent' ? 'Kelmaganga' : 'Kech qolgan';
-            
+
+            const statusClass = item.record.status === 'present' ? 'present' :
+                item.record.status === 'absent' ? 'absent' : 'late';
+            const statusText = item.record.status === 'present' ? 'Kelgan' :
+                item.record.status === 'absent' ? 'Kelmaganga' : 'Kech qolgan';
+
             const row = document.createElement('tr');
             row.className = 'attendance-row';
             row.innerHTML = `
@@ -1422,15 +1421,15 @@ function loadAttendanceHistory() {
                     ${item.record.time || ''}
                 </td>
             `;
-            
+
             table.appendChild(row);
         });
     }
-    
+
     info.textContent = `${startIndex + 1}-${Math.min(endIndex, totalRecords)} yozuv ${totalRecords} tadan ko'rsatilmoqda`;
-    
+
     pagination.innerHTML = '';
-    
+
     if (totalPages > 1) {
         const prevButton = document.createElement('button');
         prevButton.className = `page-btn ${currentPage === 1 ? 'disabled' : ''}`;
@@ -1442,15 +1441,15 @@ function loadAttendanceHistory() {
             }
         };
         pagination.appendChild(prevButton);
-        
+
         const maxPagesToShow = 5;
         let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
         let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-        
+
         if (endPage - startPage + 1 < maxPagesToShow) {
             startPage = Math.max(1, endPage - maxPagesToShow + 1);
         }
-        
+
         for (let i = startPage; i <= endPage; i++) {
             const pageButton = document.createElement('button');
             pageButton.className = `page-btn ${i === currentPage ? 'active' : ''}`;
@@ -1461,7 +1460,7 @@ function loadAttendanceHistory() {
             };
             pagination.appendChild(pageButton);
         }
-        
+
         const nextButton = document.createElement('button');
         nextButton.className = `page-btn ${currentPage === totalPages ? 'disabled' : ''}`;
         nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
@@ -1478,14 +1477,14 @@ function loadAttendanceHistory() {
 function updateAttendanceFilters() {
     const groupSelect = document.getElementById('historyGroup');
     const studentSelect = document.getElementById('historyStudent');
-    
+
     if (groupSelect) {
         let groupOptions = '<option value="all">Barcha guruhlar</option>';
         groups.forEach(group => {
             groupOptions += `<option value="${group.id}">${group.name}</option>`;
         });
         groupSelect.innerHTML = groupOptions;
-        
+
         let studentOptions = '<option value="all">Barcha o\'quvchilar</option>';
         students.forEach(student => {
             studentOptions += `<option value="${student.id}">${student.firstName} ${student.lastName}</option>`;
@@ -1496,40 +1495,40 @@ function updateAttendanceFilters() {
 
 function exportAttendanceHistory() {
     let allRecords = [];
-    
+
     Object.keys(attendanceHistory).forEach(dateStr => {
         Object.keys(attendanceHistory[dateStr]).forEach(studentId => {
             const record = attendanceHistory[dateStr][studentId];
             const student = students.find(s => s.id == studentId);
             const group = student ? groups.find(g => g.id === student.groupId) : null;
-            
+
             if (student) {
                 allRecords.push({
                     Sana: new Date(dateStr).toLocaleDateString('uz-UZ'),
                     'O\'quvchi': `${student.firstName} ${student.lastName}`,
                     Guruh: group ? group.name : 'Guruhsiz',
                     Telefon: student.phone,
-                    Holat: record.status === 'present' ? 'Kelgan' : 
-                           record.status === 'absent' ? 'Kelmaganga' : 'Kech qolgan',
+                    Holat: record.status === 'present' ? 'Kelgan' :
+                        record.status === 'absent' ? 'Kelmaganga' : 'Kech qolgan',
                     Izoh: record.note || '',
                     Vaqt: record.time || ''
                 });
             }
         });
     });
-    
+
     let csv = 'Sana,O\'quvchi,Guruh,Telefon,Holat,Izoh,Vaqt\n';
-    
+
     allRecords.forEach(record => {
         csv += `"${record.Sana}","${record['O\'quvchi']}","${record.Guruh}","${record.Telefon}","${record.Holat}","${record.Izoh}","${record.Vaqt}"\n`;
     });
-    
+
     const blob = new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `davomat-tarixi-${new Date().getTime()}.csv`;
     link.click();
-    
+
     showNotification('Davomat tarixi Excel formatida yuklab olindi!', 'success');
 }
 
@@ -1541,11 +1540,11 @@ function calculateAttendanceStats() {
         lateDays: {},
         overallAttendance: {}
     };
-    
+
     students.forEach(student => {
         let presentCount = 0;
         let totalCount = 0;
-        
+
         Object.keys(attendanceHistory).forEach(dateStr => {
             if (attendanceHistory[dateStr][student.id]) {
                 totalCount++;
@@ -1554,20 +1553,20 @@ function calculateAttendanceStats() {
                 }
             }
         });
-        
+
         stats.overallAttendance[student.id] = {
             present: presentCount,
             total: totalCount,
             percentage: totalCount > 0 ? Math.round((presentCount / totalCount) * 100) : 0
         };
     });
-    
+
     return stats;
 }
 
 function showMonthlyStats() {
     const stats = calculateAttendanceStats();
-    
+
     let modalContent = `
         <div class="modal-content">
             <h2 class="text-xl font-bold text-gray-800 mb-6">Oylik Davomat Statistikasi</h2>
@@ -1599,11 +1598,11 @@ function showMonthlyStats() {
             <div class="space-y-4">
                 <h3 class="font-bold text-gray-700">O'quvchilar bo'yicha statistika</h3>
     `;
-    
+
     students.forEach(student => {
         const studentStats = stats.overallAttendance[student.id];
         const group = groups.find(g => g.id === student.groupId);
-        
+
         modalContent += `
             <div class="p-3 border rounded-lg">
                 <div class="flex justify-between items-center mb-2">
@@ -1629,12 +1628,12 @@ function showMonthlyStats() {
             </div>
         `;
     });
-    
+
     modalContent += `
             </div>
         </div>
     `;
-    
+
     showModal(modalContent);
 }
 
@@ -1646,32 +1645,32 @@ function loadExams() {
     const typeFilter = document.getElementById('examTypeFilter').value;
     const statusFilter = document.getElementById('examStatusFilter').value;
     const searchTerm = document.getElementById('examSearch').value.toLowerCase();
-    
+
     if (!container) return;
-    
+
     container.innerHTML = '';
-    
+
     let filteredExams = exams;
-    
+
     if (groupFilter !== 'all') {
         filteredExams = filteredExams.filter(exam => exam.groupId == groupFilter);
     }
-    
+
     if (typeFilter !== 'all') {
         filteredExams = filteredExams.filter(exam => exam.type === typeFilter);
     }
-    
+
     if (statusFilter !== 'all') {
         filteredExams = filteredExams.filter(exam => exam.status === statusFilter);
     }
-    
+
     if (searchTerm) {
-        filteredExams = filteredExams.filter(exam => 
-            exam.name.toLowerCase().includes(searchTerm) || 
+        filteredExams = filteredExams.filter(exam =>
+            exam.name.toLowerCase().includes(searchTerm) ||
             exam.description.toLowerCase().includes(searchTerm)
         );
     }
-    
+
     if (filteredExams.length === 0) {
         container.innerHTML = `
             <div class="col-span-full text-center py-12">
@@ -1688,19 +1687,19 @@ function loadExams() {
         `;
         return;
     }
-    
+
     filteredExams.forEach(exam => {
         const group = groups.find(g => g.id === exam.groupId);
         const groupName = group ? group.name : 'Guruhsiz';
         const results = examResults.filter(r => r.examId === exam.id);
         const participantsCount = results.length;
-        
+
         const statusColors = {
             'draft': 'bg-gray-100 text-gray-800',
             'active': 'bg-green-100 text-green-800',
             'completed': 'bg-blue-100 text-blue-800'
         };
-        
+
         const typeNames = {
             'quiz': 'Viktorina',
             'midterm': 'Oraliq nazorat',
@@ -1708,7 +1707,7 @@ function loadExams() {
             'test': 'Test',
             'survey': 'So\'rovnoma'
         };
-        
+
         const card = document.createElement('div');
         card.className = 'bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow duration-300';
         card.innerHTML = `
@@ -1718,8 +1717,8 @@ function loadExams() {
                     <span class="text-sm text-gray-500">${typeNames[exam.type] || exam.type}</span>
                 </div>
                 <span class="px-3 py-1 text-xs rounded-full ${statusColors[exam.status] || 'bg-gray-100'}">
-                    ${exam.status === 'draft' ? 'Qoralama' : 
-                      exam.status === 'active' ? 'Faol' : 'Yakunlangan'}
+                    ${exam.status === 'draft' ? 'Qoralama' :
+                exam.status === 'active' ? 'Faol' : 'Yakunlangan'}
                 </span>
             </div>
             
@@ -1774,23 +1773,23 @@ function loadExams() {
                 </div>
             </div>
         `;
-        
+
         container.appendChild(card);
     });
-    
+
     loadExamResultsTable();
 }
 
 function loadExamResultsTable() {
     const table = document.getElementById('examResultsTable');
     if (!table) return;
-    
+
     table.innerHTML = '';
-    
+
     const recentResults = examResults
         .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))
         .slice(0, 5);
-    
+
     if (recentResults.length === 0) {
         table.innerHTML = `
             <tr>
@@ -1801,17 +1800,17 @@ function loadExamResultsTable() {
         `;
         return;
     }
-    
+
     recentResults.forEach(result => {
         const exam = exams.find(e => e.id === result.examId);
         const student = students.find(s => s.id === result.studentId);
         const group = student ? groups.find(g => g.id === student.groupId) : null;
-        
+
         if (!exam || !student) return;
-        
+
         const percentage = Math.round((result.score / exam.maxScore) * 100);
         const grade = getGradeFromScore(percentage);
-        
+
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
         row.innerHTML = `
@@ -1828,10 +1827,10 @@ function loadExamResultsTable() {
             <td class="px-6 py-4">${exam.name}</td>
             <td class="px-6 py-4">${group ? group.name : 'Guruhsiz'}</td>
             <td class="px-6 py-4">
-                <span class="font-bold ${grade === 'A' ? 'text-green-600' : 
-                                       grade === 'B' ? 'text-blue-600' : 
-                                       grade === 'C' ? 'text-yellow-600' : 
-                                       grade === 'D' ? 'text-orange-600' : 'text-red-600'}">
+                <span class="font-bold ${grade === 'A' ? 'text-green-600' :
+                grade === 'B' ? 'text-blue-600' :
+                    grade === 'C' ? 'text-yellow-600' :
+                        grade === 'D' ? 'text-orange-600' : 'text-red-600'}">
                     ${result.score}/${exam.maxScore} (${grade})
                 </span>
             </td>
@@ -1848,7 +1847,7 @@ function loadExamResultsTable() {
                 </button>
             </td>
         `;
-        
+
         table.appendChild(row);
     });
 }
@@ -1858,30 +1857,30 @@ function createNewExam() {
     const title = document.getElementById('examModalTitle');
     const form = document.getElementById('examForm');
     const groupSelect = document.getElementById('examGroup');
-    
-    groupSelect.innerHTML = '<option value="">Tanlang</option>' + 
+
+    groupSelect.innerHTML = '<option value="">Tanlang</option>' +
         groups.map(g => `<option value="${g.id}">${g.name} (Kurs ${g.course})</option>`).join('');
-    
+
     title.textContent = 'Yangi Imtihon';
     form.reset();
     document.getElementById('examId').value = '';
     document.getElementById('questionsContainer').innerHTML = '';
-    
+
     modal.classList.remove('hidden');
 }
 
 function editExam(id) {
     const exam = exams.find(e => e.id === id);
     if (!exam) return;
-    
+
     const modal = document.getElementById('examModal');
     const title = document.getElementById('examModalTitle');
     const form = document.getElementById('examForm');
     const groupSelect = document.getElementById('examGroup');
-    
-    groupSelect.innerHTML = '<option value="">Tanlang</option>' + 
+
+    groupSelect.innerHTML = '<option value="">Tanlang</option>' +
         groups.map(g => `<option value="${g.id}">${g.name} (Kurs ${g.course})</option>`).join('');
-    
+
     title.textContent = 'Imtihonni Tahrirlash';
     document.getElementById('examId').value = exam.id;
     document.getElementById('examName').value = exam.name;
@@ -1892,16 +1891,16 @@ function editExam(id) {
     document.getElementById('endTime').value = exam.endTime || '';
     document.getElementById('duration').value = exam.duration || '';
     document.getElementById('examDescription').value = exam.description || '';
-    
+
     loadQuestions(exam.questions || []);
-    
+
     modal.classList.remove('hidden');
 }
 
 function loadQuestions(questions) {
     const container = document.getElementById('questionsContainer');
     container.innerHTML = '';
-    
+
     questions.forEach((question, index) => {
         const questionElement = document.createElement('div');
         questionElement.className = 'border rounded-lg p-4 bg-gray-50';
@@ -1945,23 +1944,23 @@ function addQuestion() {
     const modal = document.getElementById('questionModal');
     const title = document.getElementById('questionModalTitle');
     const form = document.getElementById('questionForm');
-    
+
     title.textContent = 'Yangi Savol';
     form.reset();
     document.getElementById('questionId').value = '';
     document.getElementById('optionsList').innerHTML = '';
-    
+
     for (let i = 0; i < 4; i++) {
         addOption();
     }
-    
+
     modal.classList.remove('hidden');
 }
 
 function addOption() {
     const container = document.getElementById('optionsList');
     const optionIndex = container.children.length;
-    
+
     const optionDiv = document.createElement('div');
     optionDiv.className = 'flex items-center space-x-3';
     optionDiv.innerHTML = `
@@ -1973,7 +1972,7 @@ function addOption() {
             <i class="fas fa-times"></i>
         </button>
     `;
-    
+
     container.appendChild(optionDiv);
 }
 
@@ -1981,10 +1980,10 @@ function toggleAnswerOptions() {
     const type = document.getElementById('questionType').value;
     const optionsContainer = document.getElementById('optionsContainer');
     const correctAnswerContainer = document.getElementById('correctAnswerContainer');
-    
+
     if (type === 'multiple_choice' || type === 'single_choice' || type === 'true_false' || type === 'matching') {
         optionsContainer.style.display = 'block';
-        
+
         if (type === 'true_false') {
             document.getElementById('optionsList').innerHTML = `
                 <div class="flex items-center space-x-3">
@@ -2013,7 +2012,7 @@ function toggleAnswerOptions() {
     } else {
         optionsContainer.style.display = 'none';
     }
-    
+
     if (type === 'essay') {
         correctAnswerContainer.innerHTML = `
             <textarea id="correctAnswer" rows="4" class="form-control" 
@@ -2029,7 +2028,7 @@ function toggleAnswerOptions() {
 function saveQuestion() {
     const type = document.getElementById('questionType').value;
     const options = [];
-    
+
     if (type === 'multiple_choice' || type === 'single_choice') {
         document.querySelectorAll('.option-input').forEach(input => {
             if (input.value.trim()) {
@@ -2039,7 +2038,7 @@ function saveQuestion() {
     } else if (type === 'true_false') {
         options.push('To\'g\'ri', 'Noto\'g\'ri');
     }
-    
+
     const question = {
         id: Date.now(),
         text: document.getElementById('questionText').value,
@@ -2048,7 +2047,7 @@ function saveQuestion() {
         correctAnswer: document.getElementById('correctAnswer').value,
         score: parseFloat(document.getElementById('questionScore').value) || 1
     };
-    
+
     closeQuestionModal();
     return question;
 }
@@ -2056,14 +2055,14 @@ function saveQuestion() {
 function saveExam() {
     const examId = document.getElementById('examId').value;
     const questions = [];
-    
+
     document.querySelectorAll('#questionsContainer > div').forEach(div => {
         const questionData = div.dataset.question;
         if (questionData) {
             questions.push(JSON.parse(questionData));
         }
     });
-    
+
     const exam = {
         id: examId || Date.now(),
         name: document.getElementById('examName').value,
@@ -2072,22 +2071,22 @@ function saveExam() {
         maxScore: parseInt(document.getElementById('maxScore').value),
         startTime: document.getElementById('startTime').value || null,
         endTime: document.getElementById('endTime').value || null,
-        duration: document.getElementById('duration').value ? 
-                 parseInt(document.getElementById('duration').value) : null,
+        duration: document.getElementById('duration').value ?
+            parseInt(document.getElementById('duration').value) : null,
         description: document.getElementById('examDescription').value,
         questions: questions,
         status: 'draft',
         createdAt: new Date().toISOString(),
         createdBy: currentUser.id
     };
-    
+
     if (examId) {
         const index = exams.findIndex(e => e.id == examId);
         exams[index] = exam;
     } else {
         exams.push(exam);
     }
-    
+
     saveExamsToStorage();
     loadExams();
     closeExamModal();
@@ -2097,7 +2096,7 @@ function saveExam() {
 function saveExamAsDraft() {
     const exam = getExamFromForm();
     exam.status = 'draft';
-    
+
     if (exam.id) {
         const index = exams.findIndex(e => e.id == exam.id);
         exams[index] = exam;
@@ -2105,7 +2104,7 @@ function saveExamAsDraft() {
         exam.id = Date.now();
         exams.push(exam);
     }
-    
+
     saveExamsToStorage();
     loadExams();
     closeExamModal();
@@ -2115,7 +2114,7 @@ function saveExamAsDraft() {
 function activateExam() {
     const exam = getExamFromForm();
     exam.status = 'active';
-    
+
     if (exam.id) {
         const index = exams.findIndex(e => e.id == exam.id);
         exams[index] = exam;
@@ -2123,7 +2122,7 @@ function activateExam() {
         exam.id = Date.now();
         exams.push(exam);
     }
-    
+
     saveExamsToStorage();
     loadExams();
     closeExamModal();
@@ -2138,10 +2137,10 @@ function saveExamsToStorage() {
 function viewExam(id) {
     const exam = exams.find(e => e.id === id);
     if (!exam) return;
-    
+
     const group = groups.find(g => g.id === exam.groupId);
     const results = examResults.filter(r => r.examId === exam.id);
-    
+
     let modalContent = `
         <div class="modal-content" style="max-width: 800px;">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">${exam.name}</h2>
@@ -2169,8 +2168,8 @@ function viewExam(id) {
                         ${group ? group.name : 'Guruhsiz'}
                     </span>
                     <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-                        ${exam.status === 'draft' ? 'Qoralama' : 
-                          exam.status === 'active' ? 'Faol' : 'Yakunlangan'}
+                        ${exam.status === 'draft' ? 'Qoralama' :
+            exam.status === 'active' ? 'Faol' : 'Yakunlangan'}
                     </span>
                 </div>
             </div>
@@ -2179,7 +2178,7 @@ function viewExam(id) {
                 <h3 class="font-bold text-gray-700 mb-3">Savollar (${exam.questions?.length || 0})</h3>
                 <div class="space-y-4">
     `;
-    
+
     exam.questions?.forEach((question, index) => {
         modalContent += `
             <div class="border rounded-lg p-4">
@@ -2200,7 +2199,7 @@ function viewExam(id) {
             </div>
         `;
     });
-    
+
     modalContent += `
                 </div>
             </div>
@@ -2231,38 +2230,38 @@ function viewExam(id) {
             </div>
         </div>
     `;
-    
+
     showModal(modalContent);
 }
 
 function viewExamResults(examId) {
     const exam = exams.find(e => e.id === examId);
     if (!exam) return;
-    
+
     const results = examResults.filter(r => r.examId === examId);
     const group = groups.find(g => g.id === exam.groupId);
-    
+
     results.sort((a, b) => b.score - a.score);
-    
+
     results.forEach((result, index) => {
         result.rank = index + 1;
     });
-    
+
     const totalParticipants = results.length;
-    const averageScore = totalParticipants > 0 ? 
+    const averageScore = totalParticipants > 0 ?
         (results.reduce((sum, r) => sum + r.score, 0) / totalParticipants).toFixed(1) : 0;
     const highestScore = totalParticipants > 0 ? Math.max(...results.map(r => r.score)) : 0;
     const lowestScore = totalParticipants > 0 ? Math.min(...results.map(r => r.score)) : 0;
-    
+
     document.getElementById('resultsModalTitle').textContent = `${exam.name} - Natijalar`;
     document.getElementById('totalParticipants').textContent = totalParticipants;
     document.getElementById('averageScore').textContent = averageScore;
     document.getElementById('highestScore').textContent = highestScore;
     document.getElementById('lowestScore').textContent = lowestScore;
-    
+
     const table = document.getElementById('resultsDetailsTable');
     table.innerHTML = '';
-    
+
     if (totalParticipants === 0) {
         table.innerHTML = `
             <tr>
@@ -2275,10 +2274,10 @@ function viewExamResults(examId) {
         results.forEach(result => {
             const student = students.find(s => s.id === result.studentId);
             if (!student) return;
-            
+
             const percentage = Math.round((result.score / exam.maxScore) * 100);
             const grade = getGradeFromScore(percentage);
-            
+
             const row = document.createElement('tr');
             row.className = 'hover:bg-gray-50';
             row.innerHTML = `
@@ -2295,10 +2294,10 @@ function viewExamResults(examId) {
                         <div class="font-medium">${student.firstName} ${student.lastName}</div>
                     </div>
                 </td>
-                <td class="px-6 py-4 font-bold ${grade === 'A' ? 'text-green-600' : 
-                                                   grade === 'B' ? 'text-blue-600' : 
-                                                   grade === 'C' ? 'text-yellow-600' : 
-                                                   grade === 'D' ? 'text-orange-600' : 'text-red-600'}">
+                <td class="px-6 py-4 font-bold ${grade === 'A' ? 'text-green-600' :
+                    grade === 'B' ? 'text-blue-600' :
+                        grade === 'C' ? 'text-yellow-600' :
+                            grade === 'D' ? 'text-orange-600' : 'text-red-600'}">
                     ${result.score}/${exam.maxScore}
                 </td>
                 <td class="px-6 py-4">
@@ -2311,13 +2310,13 @@ function viewExamResults(examId) {
                     </div>
                 </td>
                 <td class="px-6 py-4">
-                    ${new Date(result.completedAt).toLocaleTimeString('uz-UZ', { 
-                        hour: '2-digit', minute: '2-digit' 
-                    })}
+                    ${new Date(result.completedAt).toLocaleTimeString('uz-UZ', {
+                                hour: '2-digit', minute: '2-digit'
+                            })}
                 </td>
                 <td class="px-6 py-4">
-                    <span class="px-2 py-1 ${percentage >= 60 ? 'bg-green-100 text-green-800' : 
-                                              'bg-red-100 text-red-800'} rounded text-sm">
+                    <span class="px-2 py-1 ${percentage >= 60 ? 'bg-green-100 text-green-800' :
+                    'bg-red-100 text-red-800'} rounded text-sm">
                         ${percentage >= 60 ? "O'tdi" : "O'ta olmadi"}
                     </span>
                 </td>
@@ -2328,11 +2327,11 @@ function viewExamResults(examId) {
                     </button>
                 </td>
             `;
-            
+
             table.appendChild(row);
         });
     }
-    
+
     document.getElementById('resultsModal').classList.remove('hidden');
 }
 
@@ -2364,7 +2363,7 @@ function getExamFromForm() {
             questions.push(JSON.parse(questionData));
         }
     });
-    
+
     return {
         id: document.getElementById('examId').value || Date.now(),
         name: document.getElementById('examName').value,
@@ -2373,8 +2372,8 @@ function getExamFromForm() {
         maxScore: parseInt(document.getElementById('maxScore').value),
         startTime: document.getElementById('startTime').value || null,
         endTime: document.getElementById('endTime').value || null,
-        duration: document.getElementById('duration').value ? 
-                 parseInt(document.getElementById('duration').value) : null,
+        duration: document.getElementById('duration').value ?
+            parseInt(document.getElementById('duration').value) : null,
         description: document.getElementById('examDescription').value,
         questions: questions,
         createdAt: new Date().toISOString(),
@@ -2397,27 +2396,27 @@ function closeResultsModal() {
 function startExamForStudent(examId) {
     const exam = exams.find(e => e.id === examId);
     if (!exam) return;
-    
+
     const now = new Date();
     if (exam.startTime && new Date(exam.startTime) > now) {
         showNotification('Imtihon hali boshlanmagan!', 'error');
         return;
     }
-    
+
     if (exam.endTime && new Date(exam.endTime) < now) {
         showNotification('Imtihon vaqti tugagan!', 'error');
         return;
     }
-    
-    const existingResult = examResults.find(r => 
+
+    const existingResult = examResults.find(r =>
         r.examId === examId && r.studentId === currentUser.id
     );
-    
+
     if (existingResult) {
         showNotification('Siz bu imtihonni allaqachon topshirgansiz!', 'error');
         return;
     }
-    
+
     showExamPage(exam);
 }
 
@@ -2444,7 +2443,7 @@ function showExamPage(exam) {
             <form id="examSubmissionForm" class="space-y-6">
                 <input type="hidden" id="examId" value="${exam.id}">
     `;
-    
+
     exam.questions?.forEach((question, index) => {
         modalContent += `
             <div class="border rounded-lg p-4">
@@ -2455,7 +2454,7 @@ function showExamPage(exam) {
             </div>
         `;
     });
-    
+
     modalContent += `
                 <div class="flex justify-between pt-6 border-t">
                     <button type="button" onclick="closeModal()" 
@@ -2470,9 +2469,9 @@ function showExamPage(exam) {
             </form>
         </div>
     `;
-    
+
     showModal(modalContent);
-    
+
     if (exam.duration) {
         startExamTimer(exam.duration * 60);
     }
@@ -2480,7 +2479,7 @@ function showExamPage(exam) {
 
 function renderQuestionInput(question, index) {
     let html = '';
-    
+
     switch (question.type) {
         case 'multiple_choice':
             html = `<div class="space-y-2">`;
@@ -2497,7 +2496,7 @@ function renderQuestionInput(question, index) {
             });
             html += `</div>`;
             break;
-            
+
         case 'single_choice':
         case 'true_false':
             html = `<div class="space-y-2">`;
@@ -2514,7 +2513,7 @@ function renderQuestionInput(question, index) {
             });
             html += `</div>`;
             break;
-            
+
         case 'short_answer':
             html = `
                 <input type="text" 
@@ -2523,7 +2522,7 @@ function renderQuestionInput(question, index) {
                        placeholder="Javobingizni kiriting...">
             `;
             break;
-            
+
         case 'essay':
             html = `
                 <textarea name="question-${index}"
@@ -2532,26 +2531,26 @@ function renderQuestionInput(question, index) {
                           placeholder="Javobingizni batafsil yozing..."></textarea>
             `;
             break;
-            
+
         case 'matching':
             html = `<div class="space-y-2">`;
             html += `Moslashtirish savollari bu yerda ko'rsatiladi`;
             html += `</div>`;
             break;
-            
+
         default:
             html = `<input type="text" name="question-${index}" class="form-control">`;
     }
-    
+
     return html;
 }
 
 function startExamTimer(totalSeconds) {
     const timerElement = document.getElementById('examTimer');
     if (!timerElement) return;
-    
+
     let remainingSeconds = totalSeconds;
-    
+
     const timer = setInterval(() => {
         if (remainingSeconds <= 0) {
             clearInterval(timer);
@@ -2559,7 +2558,7 @@ function startExamTimer(totalSeconds) {
             submitExam();
             return;
         }
-        
+
         remainingSeconds--;
         timerElement.textContent = formatTime(remainingSeconds);
     }, 1000);
@@ -2569,26 +2568,26 @@ function formatTime(seconds) {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    
+
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
 function submitExam() {
     const examId = document.getElementById('examId').value;
     const exam = exams.find(e => e.id == examId);
-    
+
     if (!exam) return;
-    
+
     let totalScore = 0;
     const answers = [];
-    
+
     exam.questions?.forEach((question, index) => {
         const answer = getAnswerFromForm(index, question.type);
         const isCorrect = checkAnswer(answer, question.correctAnswer, question.type);
         const score = isCorrect ? question.score : 0;
-        
+
         totalScore += score;
-        
+
         answers.push({
             questionId: question.id,
             questionText: question.text,
@@ -2599,7 +2598,7 @@ function submitExam() {
             maxScore: question.score
         });
     });
-    
+
     const result = {
         id: Date.now(),
         examId: exam.id,
@@ -2610,12 +2609,12 @@ function submitExam() {
         completedAt: new Date().toISOString(),
         timeSpent: 0
     };
-    
+
     examResults.push(result);
     saveExamsToStorage();
-    
+
     updateExamStatus(exam.id);
-    
+
     closeModal();
     showNotification(`Imtihon topshirildi! Sizning balingiz: ${totalScore}/${exam.maxScore}`, 'success');
 }
@@ -2635,23 +2634,23 @@ function getAnswerFromForm(index, type) {
 
 function checkAnswer(answer, correctAnswer, type) {
     if (!answer) return false;
-    
+
     switch (type) {
         case 'multiple_choice':
-            const correctAnswers = Array.isArray(correctAnswer) ? 
+            const correctAnswers = Array.isArray(correctAnswer) ?
                 correctAnswer : [correctAnswer];
             return JSON.stringify(answer.sort()) === JSON.stringify(correctAnswers.sort());
-            
+
         case 'single_choice':
         case 'true_false':
             return answer === correctAnswer;
-            
+
         case 'short_answer':
             return answer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
-            
+
         case 'essay':
             return answer.trim().length > 10;
-            
+
         default:
             return false;
     }
@@ -2660,10 +2659,10 @@ function checkAnswer(answer, correctAnswer, type) {
 function updateExamStatus(examId) {
     const exam = exams.find(e => e.id === examId);
     if (!exam) return;
-    
+
     const groupStudents = students.filter(s => s.groupId === exam.groupId);
     const completedResults = examResults.filter(r => r.examId === examId);
-    
+
     if (groupStudents.length > 0 && completedResults.length >= groupStudents.length) {
         const examIndex = exams.findIndex(e => e.id === examId);
         exams[examIndex].status = 'completed';
@@ -2678,33 +2677,33 @@ function importGoogleForm() {
 function exportExamResults() {
     const examId = document.querySelector('#examId')?.value;
     if (!examId) return;
-    
+
     const exam = exams.find(e => e.id == examId);
     const results = examResults.filter(r => r.examId == examId);
-    
+
     if (!exam || results.length === 0) {
         showNotification('Eksport qilish uchun natijalar mavjud emas!', 'error');
         return;
     }
-    
+
     let csv = 'O\'rin,O\'quvchi,Ball,Maksimal Ball,Foiz,Grade,Vaqt\n';
-    
+
     results.forEach(result => {
         const student = students.find(s => s.id === result.studentId);
         if (!student) return;
-        
+
         const percentage = Math.round((result.score / exam.maxScore) * 100);
         const grade = getGradeFromScore(percentage);
-        
+
         csv += `"${result.rank || '-'}","${student.firstName} ${student.lastName}",${result.score},${exam.maxScore},${percentage}%,"${grade}","${new Date(result.completedAt).toLocaleString('uz-UZ')}"\n`;
     });
-    
+
     const blob = new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `imtihon-natijalari-${exam.name}-${new Date().getTime()}.csv`;
     link.click();
-    
+
     showNotification('Natijalar Excel formatida yuklab olindi!', 'success');
 }
 
@@ -2713,10 +2712,10 @@ function exportExamResults() {
 function toggleReportFields() {
     const reportType = document.getElementById('reportType').value;
     const container = document.getElementById('reportFields');
-    
+
     let html = '';
-    
-    switch(reportType) {
+
+    switch (reportType) {
         case 'attendance':
             html = `
                 <div>
@@ -2740,7 +2739,7 @@ function toggleReportFields() {
                 </div>
             `;
             break;
-            
+
         case 'exam_results':
             html = `
                 <div>
@@ -2769,7 +2768,7 @@ function toggleReportFields() {
                 </div>
             `;
             break;
-            
+
         case 'parent_notification':
             html = `
                 <div>
@@ -2807,7 +2806,7 @@ function toggleReportFields() {
                 </div>
             `;
             break;
-            
+
         default:
             html = `
                 <div>
@@ -2825,18 +2824,18 @@ function toggleReportFields() {
                 </div>
             `;
     }
-    
+
     container.innerHTML = html;
-    
+
     if (reportType === 'attendance' || reportType === 'grades' || reportType === 'students' || reportType === 'monthly') {
         loadGroupsIntoSelect('reportGroup');
     }
-    
+
     if (reportType === 'exam_results') {
         loadExamsIntoSelect('reportExam');
         loadGroupsIntoSelect('reportGroup');
     }
-    
+
     if (reportType === 'parent_notification') {
         loadGroupsIntoSelect('specificGroup');
         setupNotificationListeners();
@@ -2846,26 +2845,26 @@ function toggleReportFields() {
 function loadGroupsIntoSelect(selectId) {
     const select = document.getElementById(selectId);
     if (!select) return;
-    
+
     let options = '<option value="all">Barcha guruhlar</option>';
     groups.forEach(group => {
         options += `<option value="${group.id}">${group.name}</option>`;
     });
-    
+
     select.innerHTML = options;
 }
 
 function loadExamsIntoSelect(selectId) {
     const select = document.getElementById(selectId);
     if (!select) return;
-    
+
     let options = '<option value="">Tanlang</option>';
     exams.forEach(exam => {
         if (exam.status === 'completed') {
             options += `<option value="${exam.id}">${exam.name}</option>`;
         }
     });
-    
+
     select.innerHTML = options;
 }
 
@@ -2873,29 +2872,29 @@ function loadEmailTemplate() {
     const templateName = document.getElementById('emailTemplate').value;
     const subjectInput = document.getElementById('emailSubject');
     const messageInput = document.getElementById('emailMessage');
-    
+
     if (templateName === 'custom') {
         subjectInput.value = '';
         messageInput.value = '';
         return;
     }
-    
+
     const template = emailTemplates[templateName];
     if (template) {
         subjectInput.value = template.subject;
         messageInput.value = template.message;
     }
-    
+
     loadRecipients();
 }
 
 function loadRecipients() {
     const templateName = document.getElementById('emailTemplate').value;
     const select = document.getElementById('emailRecipients');
-    
+
     select.innerHTML = '';
-    
-    switch(templateName) {
+
+    switch (templateName) {
         case 'attendance_report':
         case 'low_attendance':
             students.forEach(student => {
@@ -2905,7 +2904,7 @@ function loadRecipients() {
                 select.appendChild(option);
             });
             break;
-            
+
         case 'exam_results':
             const examId = document.getElementById('reportExam')?.value;
             if (examId) {
@@ -2921,7 +2920,7 @@ function loadRecipients() {
                 });
             }
             break;
-            
+
         default:
             students.forEach(student => {
                 const option = document.createElement('option');
@@ -2951,10 +2950,10 @@ function formatText(command) {
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const selectedText = textarea.value.substring(start, end);
-    
+
     let formattedText = '';
-    
-    switch(command) {
+
+    switch (command) {
         case 'bold':
             formattedText = `<strong>${selectedText}</strong>`;
             break;
@@ -2965,16 +2964,16 @@ function formatText(command) {
             formattedText = `<u>${selectedText}</u>`;
             break;
     }
-    
+
     textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
 }
 
 function insertVariable(variable) {
     const textarea = document.getElementById('emailMessage');
     const start = textarea.selectionStart;
-    
+
     let variableText = '';
-    switch(variable) {
+    switch (variable) {
         case 'student_name':
             variableText = '{student_name}';
             break;
@@ -2994,7 +2993,7 @@ function insertVariable(variable) {
             variableText = '{score}';
             break;
     }
-    
+
     textarea.value = textarea.value.substring(0, start) + variableText + textarea.value.substring(start);
     textarea.focus();
 }
@@ -3004,26 +3003,26 @@ function previewEmail() {
     const message = document.getElementById('emailMessage').value;
     const recipientsSelect = document.getElementById('emailRecipients');
     const selectedRecipients = Array.from(recipientsSelect.selectedOptions).map(opt => opt.textContent);
-    
+
     if (!subject.trim()) {
         showNotification('Iltimos, email mavzusini kiriting!', 'error');
         return;
     }
-    
+
     if (!message.trim()) {
         showNotification('Iltimos, xabar matnini kiriting!', 'error');
         return;
     }
-    
+
     if (selectedRecipients.length === 0) {
         showNotification('Iltimos, kamida bitta qabul qiluvchini tanlang!', 'error');
         return;
     }
-    
+
     document.getElementById('previewSubject').textContent = subject;
     document.getElementById('previewRecipients').textContent = selectedRecipients.join(', ');
     document.getElementById('previewMessage').innerHTML = message.replace(/\n/g, '<br>');
-    
+
     document.getElementById('emailPreviewModal').classList.remove('hidden');
 }
 
@@ -3036,10 +3035,10 @@ function confirmSendEmails() {
     const message = document.getElementById('emailMessage').value;
     const recipientsSelect = document.getElementById('emailRecipients');
     const selectedStudentIds = Array.from(recipientsSelect.selectedOptions).map(opt => parseInt(opt.value));
-    
+
     let successCount = 0;
     let failedCount = 0;
-    
+
     selectedStudentIds.forEach(studentId => {
         const student = students.find(s => s.id === studentId);
         if (student && student.email) {
@@ -3049,9 +3048,9 @@ function confirmSendEmails() {
             failedCount++;
         }
     });
-    
+
     closeEmailPreview();
-    
+
     const successMessage = `
         <p class="text-center mb-4">
             <i class="fas fa-check-circle text-4xl text-green-600 mb-3"></i><br>
@@ -3063,16 +3062,16 @@ function confirmSendEmails() {
             </p>
         ` : ''}
     `;
-    
+
     document.getElementById('emailSuccessMessage').innerHTML = successMessage;
     document.getElementById('emailSuccessModal').classList.remove('hidden');
-    
+
     showNotification(`${successCount} ta email yuborildi!`, 'success');
 }
 
 function logEmailSent(studentId, subject, message) {
     const emailLogs = JSON.parse(localStorage.getItem('emailLogs')) || [];
-    
+
     emailLogs.push({
         id: Date.now(),
         studentId: studentId,
@@ -3081,7 +3080,7 @@ function logEmailSent(studentId, subject, message) {
         sentAt: new Date().toISOString(),
         sentBy: currentUser.id
     });
-    
+
     localStorage.setItem('emailLogs', JSON.stringify(emailLogs));
 }
 
@@ -3093,32 +3092,32 @@ function sendAutoNotification(type, studentId, data = {}) {
     if (!emailSettings[`auto${type.charAt(0).toUpperCase() + type.slice(1)}`]) {
         return;
     }
-    
+
     const student = students.find(s => s.id === studentId);
     if (!student || !student.email) return;
-    
+
     let subject = '';
     let message = '';
-    
-    switch(type) {
+
+    switch (type) {
         case 'attendance':
             if (data.attendancePercentage < 50) {
                 subject = `Hurmatli ota-ona, ${student.firstName}ning davomat foizi past`;
                 message = `Hurmatli ota-ona, ${student.firstName}ning hozirgi davomat foizi ${data.attendancePercentage}% ga yetdi. Iltimos, farzandingizning maktabga kelishini ta'minlang.`;
             }
             break;
-            
+
         case 'examResults':
             subject = `Hurmatli ota-ona, ${student.firstName}ning imtihon natijalari`;
             message = `Hurmatli ota-ona, ${student.firstName}ning ${data.examName} imtihoni natijasi: ${data.score}/${data.maxScore}. ${data.percentage >= 60 ? 'Tabriklaymiz!' : 'Yana bir bor urinib ko\'ring.'}`;
             break;
-            
+
         case 'birthday':
             subject = `Tug'ilgan kuningiz bilan, ${student.firstName}!`;
             message = `Hurmatli ${student.firstName} va ota-onalari, sizni tug'ilgan kuningiz bilan chin qalbimizdan tabriklaymiz! Sog'lik-somat, baxt-u farovat tilaymiz!`;
             break;
     }
-    
+
     if (subject && message) {
         console.log(`Email sent to ${student.email}: ${subject}`);
     }
@@ -3129,7 +3128,7 @@ function saveAutoEmailSettings() {
     emailSettings.autoExamResults = document.getElementById('autoExamResults').checked;
     emailSettings.autoMonthlyReport = document.getElementById('autoMonthlyReport').checked;
     emailSettings.autoBirthday = document.getElementById('autoBirthday').checked;
-    
+
     localStorage.setItem('emailSettings', JSON.stringify(emailSettings));
     showNotification('Email sozlamalari saqlandi!', 'success');
 }
@@ -3137,18 +3136,18 @@ function saveAutoEmailSettings() {
 function sendExamResultsToParents(examId) {
     const exam = exams.find(e => e.id === examId);
     if (!exam || exam.status !== 'completed') return;
-    
+
     const results = examResults.filter(r => r.examId === examId);
-    
+
     results.forEach(result => {
         const student = students.find(s => s.id === result.studentId);
         if (!student || !student.email) return;
-        
+
         const sortedResults = results.sort((a, b) => b.score - a.score);
         const rank = sortedResults.findIndex(r => r.id === result.id) + 1;
         const percentage = Math.round((result.score / exam.maxScore) * 100);
         const grade = getGradeFromScore(percentage);
-        
+
         let performanceComment = '';
         if (percentage >= 90) {
             performanceComment = 'Ajoyib natija! Farzandingiz juda yaxshi ishladi.';
@@ -3159,7 +3158,7 @@ function sendExamResultsToParents(examId) {
         } else {
             performanceComment = 'Yaxshilash uchun qo\'shimcha yordam kerak.';
         }
-        
+
         const emailData = {
             student_name: `${student.firstName} ${student.lastName}`,
             parent_name: student.parentName || 'Hurmatli ota-ona',
@@ -3172,7 +3171,7 @@ function sendExamResultsToParents(examId) {
             performance_comment: performanceComment,
             school_name: 'Talaba Menejeri'
         };
-        
+
         sendPersonalizedEmail(student.email, 'exam_results', emailData);
     });
 }
@@ -3180,18 +3179,18 @@ function sendExamResultsToParents(examId) {
 function sendPersonalizedEmail(email, templateName, data) {
     const template = emailTemplates[templateName];
     if (!template) return;
-    
+
     let subject = template.subject;
     let message = template.message;
-    
+
     Object.keys(data).forEach(key => {
         const placeholder = `{${key}}`;
         subject = subject.replace(new RegExp(placeholder, 'g'), data[key]);
         message = message.replace(new RegExp(placeholder, 'g'), data[key]);
     });
-    
+
     console.log(`Sending email to ${email}:`, { subject, message });
-    
+
     const emailLogs = JSON.parse(localStorage.getItem('emailLogs')) || [];
     emailLogs.push({
         id: Date.now(),
@@ -3207,16 +3206,16 @@ function sendPersonalizedEmail(email, templateName, data) {
 function sendMonthlyReports() {
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
-    const monthNames = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 
-                       'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'];
-    
+    const monthNames = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun',
+        'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'];
+
     students.forEach(student => {
         if (!student.email) return;
-        
+
         const attendanceStats = calculateStudentAttendance(student.id, currentMonth, currentYear);
-        
+
         const examStats = calculateStudentExamStats(student.id);
-        
+
         const emailData = {
             student_name: `${student.firstName} ${student.lastName}`,
             parent_name: student.parentName || 'Hurmatli ota-ona',
@@ -3229,7 +3228,7 @@ function sendMonthlyReports() {
             exam_count: examStats.count,
             school_name: 'Talaba Menejeri'
         };
-        
+
         sendPersonalizedEmail(student.email, 'attendance_report', emailData);
     });
 }
@@ -3239,7 +3238,7 @@ function calculateStudentAttendance(studentId, month, year) {
     let absent = 0;
     let late = 0;
     let total = 0;
-    
+
     Object.keys(attendanceHistory).forEach(dateStr => {
         const date = new Date(dateStr);
         if (date.getMonth() === month && date.getFullYear() === year) {
@@ -3252,19 +3251,19 @@ function calculateStudentAttendance(studentId, month, year) {
             }
         }
     });
-    
+
     const percentage = total > 0 ? Math.round((present / total) * 100) : 0;
-    
+
     return { present, absent, late, total, percentage };
 }
 
 function calculateStudentExamStats(studentId) {
     const studentResults = examResults.filter(r => r.studentId === studentId);
     const count = studentResults.length;
-    
+
     let totalScore = 0;
     let maxScore = 0;
-    
+
     studentResults.forEach(result => {
         const exam = exams.find(e => e.id === result.examId);
         if (exam) {
@@ -3272,21 +3271,21 @@ function calculateStudentExamStats(studentId) {
             maxScore += exam.maxScore;
         }
     });
-    
+
     const averageGrade = maxScore > 0 ? (totalScore / maxScore * 5).toFixed(1) : 0;
-    
+
     return { count, totalScore, averageGrade };
 }
 
 function sendBirthdayGreetings() {
     const today = new Date();
     const todayStr = `${today.getMonth() + 1}-${today.getDate()}`;
-    
+
     students.forEach(student => {
         if (student.birthDate) {
             const birthDate = new Date(student.birthDate);
             const birthStr = `${birthDate.getMonth() + 1}-${birthDate.getDate()}`;
-            
+
             if (birthStr === todayStr && student.email) {
                 sendPersonalizedEmail(student.email, 'birthday_greeting', {
                     student_name: `${student.firstName} ${student.lastName}`,
@@ -3300,8 +3299,8 @@ function sendBirthdayGreetings() {
 function setupNotificationListeners() {
     const recipientsGroup = document.getElementById('recipientsGroup');
     const specificGroupContainer = document.getElementById('specificGroupContainer');
-    
-    recipientsGroup.addEventListener('change', function() {
+
+    recipientsGroup.addEventListener('change', function () {
         if (this.value === 'specific_group') {
             specificGroupContainer.classList.remove('hidden');
         } else {
@@ -3322,9 +3321,9 @@ function loadEmailSettings() {
 function updateStatistics() {
     document.getElementById('sidebarGroups').textContent = groups.length;
     document.getElementById('sidebarStudents').textContent = students.length;
-    
+
     const presentCount = students.filter(s => s.attendance === 'present').length;
-    const attendanceRate = students.length > 0 ? 
+    const attendanceRate = students.length > 0 ?
         Math.round((presentCount / students.length) * 100) : 0;
     document.getElementById('sidebarAttendance').textContent = attendanceRate + '%';
 }
@@ -3341,8 +3340,8 @@ function showModal(content) {
     modal.className = 'modal-overlay';
     modal.innerHTML = content;
     document.body.appendChild(modal);
-    
-    modal.addEventListener('click', function(e) {
+
+    modal.addEventListener('click', function (e) {
         if (e.target === modal || e.target.classList.contains('close-modal')) {
             document.body.removeChild(modal);
         }
@@ -3361,7 +3360,7 @@ function showNotification(message, type = 'info') {
     if (oldNotification) {
         oldNotification.remove();
     }
-    
+
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.innerHTML = `
@@ -3370,9 +3369,9 @@ function showNotification(message, type = 'info') {
             ${message}
         </div>
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
         notification.remove();
     }, 3000);
@@ -3386,22 +3385,22 @@ function toggleSidebar() {
 function setupEventListeners() {
     const searchInput = document.getElementById('globalSearch');
     if (searchInput) {
-        searchInput.addEventListener('input', function(e) {
+        searchInput.addEventListener('input', function (e) {
             const searchTerm = e.target.value.toLowerCase();
             console.log('Qidiruv:', searchTerm);
         });
     }
-    
+
     const modals = document.querySelectorAll('.modal-overlay');
     modals.forEach(modal => {
-        modal.addEventListener('click', function(e) {
+        modal.addEventListener('click', function (e) {
             if (e.target === modal) {
                 modal.classList.add('hidden');
             }
         });
     });
-    
-    document.addEventListener('keydown', function(e) {
+
+    document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
             closeModal();
             document.getElementById('groupModal').classList.add('hidden');
@@ -3409,7 +3408,7 @@ function setupEventListeners() {
             document.getElementById('registerModal').classList.add('hidden');
         }
     });
-    
+
     document.getElementById('reportType')?.addEventListener('change', toggleReportFields);
     document.getElementById('emailTemplate')?.addEventListener('change', loadEmailTemplate);
 }
@@ -3430,7 +3429,7 @@ function sendEmails() {
         showNotification('Xabar matnini kiriting!', 'error');
         return;
     }
-    
+
     showNotification('Email\'lar yuborildi! (Simulyatsiya)', 'success');
 }
 
@@ -3439,21 +3438,21 @@ function saveProfile() {
     const email = document.getElementById('profileEmail').value;
     const phone = document.getElementById('profilePhone').value;
     const newPassword = document.getElementById('newPassword').value;
-    
+
     const userIndex = users.findIndex(u => u.id === currentUser.id);
     if (userIndex !== -1) {
         users[userIndex].name = name;
         users[userIndex].email = email;
         users[userIndex].phone = phone;
-        
+
         if (newPassword) {
             users[userIndex].password = newPassword;
         }
-        
+
         currentUser = users[userIndex];
         localStorage.setItem('users', JSON.stringify(users));
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        
+
         updateUserInfo();
         showNotification('Profil yangilandi!', 'success');
         document.getElementById('newPassword').value = '';
